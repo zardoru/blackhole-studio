@@ -1,0 +1,29 @@
+<mat-form-field>
+    <mat-select placeholder="Divisor Type" [(ngModel)]="type" (ngModelChange)="onTypeChange($event)" >
+        <mat-option [value]="DivisorInputType.Fixed">
+            Fixed
+        </mat-option>
+        <mat-option [value]="DivisorInputType.BPM">
+            BPM
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+<div *ngIf="type === DivisorInputType.Fixed">
+    <mat-form-field>
+        <input matInput type="number" placeholder="Count" [(ngModel)]="currentDivisorInput.count">
+    </mat-form-field>
+</div>
+
+<div *ngIf="type === DivisorInputType.BPM">
+    <mat-form-field>
+        <input matInput type="number" placeholder="BPM" [(ngModel)]="currentDivisorInput.bpm">
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <input matInput type="number" placeholder="Divisions per beat" [(ngModel)]="currentDivisorInput.beatDivisor">
+    </mat-form-field>
+    <br>
+    Division Span (MS): {{ currentDivisorInput.divisorSpan }}
+</div>
+

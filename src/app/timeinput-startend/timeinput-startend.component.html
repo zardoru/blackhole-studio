@@ -1,0 +1,7 @@
+<mat-form-field>
+  <input matInput 
+         (change)="validateTimestamp($event)" 
+         type="text" 
+         [(ngModel)]="currentTimeInput.endTime" 
+         placeholder="End Time">
+</mat-form-field>

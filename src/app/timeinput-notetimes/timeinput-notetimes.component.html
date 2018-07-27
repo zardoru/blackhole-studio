@@ -1,0 +1,23 @@
+<div *ngIf="isFixedDuration">
+  <mat-form-field>
+    <mat-select [(ngModel)]="innerTimeType" placeholder="Cycle Time Type">
+      <mat-option [value]="TimeInputType.Duration">
+        Duration (MS)
+      </mat-option>
+      <mat-option [value]="TimeInputType.Beats">
+        Beats
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <br>
+
+  <app-timeinput-duration [currentTimeInput]="innerTimeInput" *ngIf="innerTimeType == TimeInputType.Duration"></app-timeinput-duration>
+  <app-timeinput-beats [currentTimeInput]="innerTimeInput" *ngIf="innerTimeType == TimeInputType.Beats"></app-timeinput-beats>
+</div>
+
+<br>
+
+<mat-form-field>
+  <textarea matInput [(ngModel)]="currentTimeInput.notes" placeholder="Note data (paste from osu editor)"></textarea>
+</mat-form-field>
