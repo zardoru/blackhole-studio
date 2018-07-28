@@ -19,3 +19,7 @@ td.mat-cell {
 .mat-form-field-wrapper {
     width: 90%;
 }
+
+.padder {
+    padding: 2%;
+}

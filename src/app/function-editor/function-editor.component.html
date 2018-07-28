@@ -1,6 +1,7 @@
 <button mat-button [matMenuTriggerFor]="fileMenu">Collection</button>
 <mat-menu #fileMenu>
   <button mat-menu-item>Load...</button>
+  <button mat-menu-item>Load...</button>
   <button mat-menu-item>Save...</button>
   <button mat-menu-item>Import...</button>
   <button mat-menu-item>Export...</button>
@@ -68,9 +69,36 @@
         No parameters to display.
       </p>
 
+      <br>
       <button mat-raised-button (click)="addParam(); paramTable.refreshRows()">Add...</button>
+      <br>
+    </div>
 
+  </mat-tab>
+  <mat-tab label="Reference">
+    <div class="padder">
+      <h2>Reference</h2>
+      <ul>
+        <li>
+          Returning a
+          <code>NaN</code> value will skip over the current divisor.
+        </li>
+        <li>
+          The
+          <code>params.builtin</code> value contains some useful definitions, such as
+          <code>currentDivisor</code>
+          <code>divisorCount</code>,
+          <code>divisorBpm</code> (can be null),
+          <code>cycleBpm</code> (can be null),
+          <code>currentCycle</code>,
+          <code>cycleCount</code>
+          <code>spanPerDivision</code> in MS, and
+          <code>spanPerCycle</code> in MS. Overwriting them changes the value for repeated calls.
+        </li>
+        <li>
+          The SV function is called once every divisor of every cycle.
+        </li>
+      </ul>
     </div>
   </mat-tab>
-
 </mat-tab-group>
