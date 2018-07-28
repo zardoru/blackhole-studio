@@ -5,7 +5,15 @@ import { AppComponent } from './app.component';
 import { TimeinputComponent } from './timeinput/timeinput.component';
 
 import { FormsModule } from "@angular/forms";
-import { MatInputModule, MatSelectModule, MatCardModule } from "@angular/material";
+import { 
+  MatInputModule,
+  MatSelectModule, 
+  MatCardModule,
+  MatMenuModule,
+  MatButtonModule,
+  MatTabsModule,
+  MatTableModule
+} from "@angular/material";
 import { TimeinputDurationComponent } from './timeinput-duration/timeinput-duration.component';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TimeinputBeatsComponent } from './timeinput-beats/timeinput-beats.component';
@@ -13,6 +21,9 @@ import { TimeinputNotetimesComponent } from './timeinput-notetimes/timeinput-not
 import { TimeinputStartendComponent } from './timeinput-startend/timeinput-startend.component';
 import { DivisorinputComponent } from './divisorinput/divisorinput.component';
 import { EmissionControlComponent } from './emission-control/emission-control.component';
+import { FunctionEditorComponent } from './function-editor/function-editor.component';
+
+import { AceEditorModule } from 'ng2-ace-editor';
 
 @NgModule({
   declarations: [
@@ -23,7 +34,8 @@ import { EmissionControlComponent } from './emission-control/emission-control.co
     TimeinputNotetimesComponent,
     TimeinputStartendComponent,
     DivisorinputComponent,
-    EmissionControlComponent
+    EmissionControlComponent,
+    FunctionEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +43,12 @@ import { EmissionControlComponent } from './emission-control/emission-control.co
     MatInputModule,
     MatSelectModule,
     MatCardModule,
-    BrowserAnimationsModule
+    MatMenuModule,
+    MatButtonModule,
+    MatTabsModule,
+    MatTableModule,
+    BrowserAnimationsModule,
+    AceEditorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

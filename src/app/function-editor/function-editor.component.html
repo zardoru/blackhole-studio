@@ -1,0 +1,76 @@
+<button mat-button [matMenuTriggerFor]="fileMenu">Collection</button>
+<mat-menu #fileMenu>
+  <button mat-menu-item>Load...</button>
+  <button mat-menu-item>Save...</button>
+  <button mat-menu-item>Import...</button>
+  <button mat-menu-item>Export...</button>
+</mat-menu>
+
+<mat-tab-group [dynamicHeight]="true">
+  <mat-tab label="Code" class="main-content">
+    <div ace-editor [(text)]="currentFunction.body" [mode]="'javascript'" style="min-height: 540px" #editor>
+    </div>
+
+  </mat-tab>
+  <mat-tab label="Parameters">
+    <br>
+    <div class="paramarea">
+      <mat-card>
+        <mat-form-field>
+          <input matInput placeholder="Function Name" [(ngModel)]="currentFunction.name">
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <textarea matInput placeholder="Function description" [(ngModel)]="currentFunction.description">
+        </textarea>
+        </mat-form-field>
+      </mat-card>
+    </div>
+
+    <br>
+
+    <div class="paramarea">
+      <h2> Function Parameters </h2>
+
+      <table mat-table [dataSource]="currentFunction.parameters" #paramTable>
+        <ng-container matColumnDef="paramName">
+          <th mat-header-cell *matHeaderCellDef> Parameter Name </th>
+          <td mat-cell *matCellDef="let el">
+            <mat-form-field class="tbIn">
+              <input matInput class="tbIn" [(ngModel)]="el.name">
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let el">
+            <mat-form-field class="tbIn">
+              <input matInput class="tbIn" [(ngModel)]="el.description">
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="defaultValue">
+          <th mat-header-cell *matHeaderCellDef> Default Value </th>
+          <td mat-cell *matCellDef="let el">
+            <mat-form-field class="tbIn">
+              <input matInput class="tbIn" [(ngModel)]="el.defaultValue">
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <p class="alert alert-primary" *ngIf="currentFunction.parameters.length === 0">
+        No parameters to display.
+      </p>
+
+      <button mat-raised-button (click)="addParam(); paramTable.refreshRows()">Add...</button>
+
+    </div>
+  </mat-tab>
+
+</mat-tab-group>

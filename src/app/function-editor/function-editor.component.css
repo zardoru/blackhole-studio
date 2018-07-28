@@ -1,0 +1,21 @@
+.mat-form-field {
+    display: inline;
+}
+
+.paramarea {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+table {
+    width: 80%;
+}
+
+td.mat-cell {
+    padding: 5px;
+}
+
+.mat-form-field-wrapper {
+    width: 90%;
+}
