@@ -1,4 +1,10 @@
-import { builtinSv } from "./builtin-sv-functions";
+import { builtinSv } from './builtin-sv-functions';
+
+export enum SvFunctionType {
+  SV,
+  BPM,
+  TimingPoint
+}
 
 export class SvParameter {
     name: string;
@@ -7,49 +13,73 @@ export class SvParameter {
     currentValue: any;
 
     constructor() {
-        this.name = "unnamed";
-        this.description = "";
-        this.defaultValue = "0";
+        this.name = 'unnamed';
+        this.description = '';
+        this.defaultValue = '0';
     }
 }
 
 export type SvFunctionParams = SvParameter[];
 
 export class SvFunction {
+
+    static defaultName = 'unnamed';
+
     name: string;
     tooltip: string;
     body: string;
     parameters: SvFunctionParams;
-    isBpm: boolean;
+    type: SvFunctionType;
 
-    static defaultName = "unnamed";
+    get isBpm() {
+      return this.type === SvFunctionType.BPM;
+    }
 
-    constructor() {
+    set isBpm(value: boolean) {
+      this.type = value ? SvFunctionType.BPM : SvFunctionType.SV;
+    }
+
+
+    constructor(type: SvFunctionType) {
         this.parameters = [];
-        this.body = 
-`(() => {
+        this.type = type;
+
+        if (type === SvFunctionType.SV || type === SvFunctionType.BPM) {
+          this.body =
+            `(() => {
     // Put your inner state here
     // var persistent = 10;
 
     // Return SV value given fraction x
     // user param are strings: param["myParamName"]
     return (x, params) => {
-        return 1; 
+        return 1;
     }
-})();`; 
+})();`;
+        } else {
+          this.body = ''; // todo xoxo
+        }
         this.name = SvFunction.defaultName;
-        this.tooltip = "";
+        this.tooltip = '';
+    }
+
+    getCurrentParameters(): any {
+      const ret: any = {};
+      for (const param of this.parameters) {
+        ret[param.name] = param.currentValue || param.defaultValue;
+      }
+
+      return ret;
     }
 }
 
-export class SvFunctionCollection
-{
+export class SvFunctionCollection {
     static getCollection() {
-        return JSON.parse(localStorage.getItem("svCollection")) || builtinSv || {};
+        return JSON.parse(localStorage.getItem('svCollection')) || builtinSv || {};
     }
 
     static setCollection(obj: any) {
-        return localStorage.setItem("svCollection", JSON.stringify(obj));
+        return localStorage.setItem('svCollection', JSON.stringify(obj));
     }
 
     constructor() {

@@ -4,13 +4,13 @@ export type Cycle = CycleDivision[];
 export abstract class DivisorInput {
     abstract getSpanDivisorCount(span: number);
 
-    generateSpanDivisors(startTime, duration, timeDeformer): Cycle {
+    generateSpanDivisors(startTime, duration, timeWarpFunction, vars: any): Cycle {
         const ret: Cycle = [];
 
         const count = this.getSpanDivisorCount(duration);
         for (let i = 0; i < count; i++) {
             let fraction = i / count;
-            fraction = timeDeformer && timeDeformer(fraction) || fraction;
+            fraction = timeWarpFunction && timeWarpFunction(fraction, vars) || fraction;
 
             ret.push({
                 time: startTime + duration * fraction,

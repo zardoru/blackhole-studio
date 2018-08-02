@@ -60,7 +60,7 @@ export class OsuTimingPoint {
     toString() {
         return `${this.time},${this.value},${this.measureLength},` +
                `${this.sampleSet},${this.sampleIndex},${this.volume},` +
-               `${this.inheritedInt},${this.kiaiInt}\n`;
+               `${this.inheritedInt},${this.kiaiInt}`;
     }
 
     applyDifference(changes: OsuTimingPointDifference) {

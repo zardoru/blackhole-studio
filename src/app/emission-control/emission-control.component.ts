@@ -4,6 +4,7 @@ import { DivisorinputComponent } from '../divisorinput/divisorinput.component';
 import { SvFunction } from '../sv-functions';
 import { TimingPointTemplateComponent } from '../timing-point-template/timing-point-template.component';
 import {MatDialog} from '@angular/material';
+import {emitTargets} from '../osu-timing-point-emitter';
 
 @Component({
   selector: 'app-emission-control',
@@ -45,6 +46,17 @@ export class EmissionControlComponent implements OnInit {
      console.log(timeInput);
      console.log(divInput);
      console.log(timingDefault);
+
+     const result = emitTargets(
+       timeInput,
+       divInput,
+       this.currentFunction,
+       this.currentTimeFunction,
+       timingDefault,
+       this.bpm
+     );
+
+     this.output = result.join('\n');
    }
 
   ngOnInit() {

@@ -6,13 +6,26 @@ import {SvFunction} from './sv-functions';
 type TimingList = OsuTimingPoint[];
 
 export class OsuTimingPointEmitter {
-    static emitFixedBpm(builtin: any,
-                        cycle: Cycle,
+    static emitFixedBpm(cycle: Cycle,
                         defaultTimingPoint: OsuTimingPoint,
                         bpm: number): TimingList {
-      return [];
+      const ret: TimingList = [];
+
+      defaultTimingPoint.inherited = false;
+
+      for (const divisor of cycle) {
+        const point = defaultTimingPoint.applyDifference(
+          {
+            time: divisor.time,
+            value: 60000 / bpm
+          });
+
+        ret.push(point);
+      }
+
+      return ret;
     }
-    static emitBpmFunction(builtin: any,
+    static emitBpmFunction(vars: any,
                            cycle: Cycle,
                            defaultTimingPoint: OsuTimingPoint,
                            bpmFunction: (number, any) => number): TimingList {
@@ -22,13 +35,13 @@ export class OsuTimingPointEmitter {
 
       let i = 0;
 
-      builtin.divisorCount = cycle.length;
+      vars.builtin.divisorCount = cycle.length;
 
       for (const divisor of cycle) {
-        builtin.currentDivisor = i;
+        vars.builtin.currentDivisor = i;
         i++;
 
-        const bpm = bpmFunction(divisor.fraction, builtin);
+        const bpm = bpmFunction(divisor.fraction, vars);
         if (isNaN(bpm)) { continue; }
 
         const point = defaultTimingPoint.applyDifference({
@@ -43,7 +56,7 @@ export class OsuTimingPointEmitter {
       return ret;
     }
 
-    static emitSv(builtin: any,
+    static emitSv(vars: any,
            cycle: Cycle,
            defaultTimingPoint: OsuTimingPoint,
            svFunction: (number, any) => number): TimingList {
@@ -55,15 +68,15 @@ export class OsuTimingPointEmitter {
         let lastSv = NaN;
 
         // set useful builtin stuff
-        builtin.divisorCount = cycle.length;
+        vars.builtin.divisorCount = cycle.length;
 
         for (const divisor of cycle) {
             // set builtin stuff that depends on the divisor index
-            builtin.currentDivisor = i;
+            vars.builtin.currentDivisor = i;
             i++;
 
             // call the sv function
-            const multiplier = svFunction && svFunction(divisor.fraction, builtin) || divisor.fraction;
+            const multiplier = svFunction && svFunction(divisor.fraction, vars) || divisor.fraction;
 
             // skip over NaNs (see reference)
             if (isNaN(multiplier)) { continue; }
@@ -116,29 +129,36 @@ export function emitTargets(
   }
 
   const userFunctionSV = svFunction ? eval(svFunction.body) : null;
-  const userFunctionTime = svFunction ? eval(timeFunction.body) : null;
+  const userFunctionTime = timeFunction ? eval(timeFunction.body) : null;
+
+  const varsSv: any = svFunction ? svFunction.getCurrentParameters() : {};
+  const varsTime: any = timeFunction ? timeFunction.getCurrentParameters() : {};
 
   for (let i = 0; i < cycleCount; i++) {
-    const cycleData = timeInput.createCycle(i, divisors, userFunctionTime);
     const builtin = generateStaticBuiltinVariables(i);
+    varsSv.builtin = builtin;
+    varsTime.builtin = builtin;
+
+    const cycleData = timeInput.createCycle(i, divisors, userFunctionTime, varsTime);
+
     let cycleResult: TimingList;
+
     if (svFunction) {
       if (svFunction.isBpm) {
         cycleResult = OsuTimingPointEmitter.emitBpmFunction(
-                            builtin,
+                            varsSv,
                             cycleData,
                             defaultTimingPoint,
                             userFunctionSV);
       } else {
         cycleResult = OsuTimingPointEmitter.emitSv(
-                            builtin,
+                            varsSv,
                             cycleData,
                             defaultTimingPoint,
                             userFunctionSV);
       }
     } else {
       cycleResult = OsuTimingPointEmitter.emitFixedBpm(
-                            builtin,
                             cycleData,
                             defaultTimingPoint,
                             fixedBpm);

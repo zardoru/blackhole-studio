@@ -18,13 +18,14 @@ export abstract class TimeInput {
         this.cycleCount = 1;
     }
 
-    createCycle(index: number, divisor: DivisorInput, timeDeformFunction) {
+    createCycle(index: number, divisor: DivisorInput, timeDeformFunction, funcVars: any) {
         const effectiveStartTime = index * this.getDuration(index) + this.startTime;
 
         return divisor.generateSpanDivisors(
             effectiveStartTime,
             this.getDuration(index),
-            timeDeformFunction
+            timeDeformFunction,
+            funcVars
         );
     }
 }
@@ -117,6 +118,10 @@ export class TimeInputNotetimeFixedDuration extends TimeInputNotetime {
 
     get isConstantCycleTime() { return true; }
 
+    constructor() {
+      super();
+    }
+
     getDuration(cycleIndex: number): number {
         if (this.noteTimes.length === 0) { return this.duration; }
         if (cycleIndex < 0) { throw new ArgumentOutOfRangeError(); }
@@ -136,6 +141,10 @@ export class TimeInputNotetimeFixedDuration extends TimeInputNotetime {
 
 export class TimeInputNotetimeVariedDuration extends TimeInputNotetime {
     get isConstantCycleTime() { return false; }
+
+    constructor() {
+      super();
+    }
 
     getDuration(cycleIndex: number): number {
         if (!this.noteTimes) { return 0; }

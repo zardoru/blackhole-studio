@@ -1,13 +1,9 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import {
-  SvParameter,
-  SvFunction,
-  SvFunctionCollection
-} from '../sv-functions';
-import { MatDialog } from '@angular/material';
-import { SelectFunctionDialogComponent } from '../select-function-dialog/select-function-dialog.component';
-import { DeleteFunctionDialogComponent } from '../delete-function-dialog/delete-function-dialog.component';
-
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {SvFunction, SvFunctionCollection, SvFunctionType, SvParameter} from '../sv-functions';
+import {MatDialog} from '@angular/material';
+import {SelectFunctionDialogComponent} from '../select-function-dialog/select-function-dialog.component';
+import {DeleteFunctionDialogComponent} from '../delete-function-dialog/delete-function-dialog.component';
+import { saveAs } from 'file-saver/FileSaver.js';
 
 @Component({
   selector: 'app-function-editor',
@@ -26,43 +22,49 @@ export class FunctionEditorComponent implements OnInit {
   currentFunction: SvFunction;
 
   displayedColumns = [
-    "paramName", 
-    "description", 
-    "defaultValue",
-    "actions"
+    'paramName',
+    'description',
+    'defaultValue',
+    'actions'
   ];
 
+
+  editorOptions = {
+    enableLiveAutocompletion: true
+  };
+
   constructor(public dialog: MatDialog) {
-    this.currentFunction = new SvFunction();
+    this.currentFunction = new SvFunction(SvFunctionType.SV);
   }
 
   ngOnInit() {
   }
 
   onNew() {
-    this.currentFunction = new SvFunction();
+    this.currentFunction = new SvFunction(SvFunctionType.SV);
   }
 
   onLoad() {
-    let opendialog = this.dialog.open(SelectFunctionDialogComponent);
+    const opendialog = this.dialog.open(SelectFunctionDialogComponent);
 
     opendialog.afterClosed().subscribe((value) => {
-      if (value)
+      if (value) {
         this.currentFunction = value;
+      }
     });
   }
 
   onSave() {
-    if (this.currentFunction.name === "" || 
-        this.currentFunction.name == SvFunction.defaultName) {
-      var ret = prompt("The function is unnamed. What will you name it?");
+    if (this.currentFunction.name === '' ||
+        this.currentFunction.name === SvFunction.defaultName) {
+      const ret = prompt('The function is unnamed. What will you name it?');
       if (ret != null) {
         this.currentFunction.name = ret;
       }
     }
 
-    let msg = `The function named "${this.currentFunction.name}" already exists. Overwrite?`;
-    var funcobj = SvFunctionCollection.getCollection();
+    const msg = `The function named "${this.currentFunction.name}" already exists. Overwrite?`;
+    const funcobj = SvFunctionCollection.getCollection();
     if (!funcobj[this.currentFunction.name] ||
       (funcobj[this.currentFunction.name] && confirm(msg))) {
 
@@ -75,32 +77,35 @@ export class FunctionEditorComponent implements OnInit {
   }
 
   onDelete() {
-    let deletedialog = this.dialog.open(DeleteFunctionDialogComponent);
+    const deletedialog = this.dialog.open(DeleteFunctionDialogComponent);
   }
 
   addParam() {
-    var newParam = new SvParameter();
-    newParam.name = "untitled_" + (this.currentFunction.parameters.length + 1);
+    const newParam = new SvParameter();
+    newParam.name = 'untitled_' + (this.currentFunction.parameters.length + 1);
     this.currentFunction.parameters.push(newParam);
     this.paramTable.renderRows();
   }
 
   deleteParam(toRemove) {
-    for (var i = 0; i < this.currentFunction.parameters.length; i++)
-    {
-      var param = this.currentFunction.parameters[i];
-      if (param === toRemove)
+    for (let i = 0; i < this.currentFunction.parameters.length; i++) {
+      const param = this.currentFunction.parameters[i];
+      if (param === toRemove) {
         this.currentFunction.parameters.splice(i, 1);
+      }
     }
 
     this.paramTable.renderRows();
   }
 
-  editorOptions = {
-    enableLiveAutocompletion: true
-  };
+  onExport() {
+    const collStr = JSON.stringify(SvFunctionCollection.getCollection());
+    const collBlob = new Blob([collStr]);
+    saveAs(collBlob, 'export.json');
+  }
+
 
   ngAfterViewInit() {
-    
+
   }
 }

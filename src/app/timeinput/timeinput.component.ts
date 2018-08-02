@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { 
-  TimeInput, 
-  TimeInputBeats, 
-  TimeInputDuration, 
+import {
+  TimeInput,
+  TimeInputBeats,
+  TimeInputDuration,
   TimeInputStartEnd,
-  TimeInputNotetimeFixedDuration, 
+  TimeInputNotetimeFixedDuration,
   TimeInputNotetimeVariedDuration,
   TimeInputType
 } from '../time-input';
@@ -21,16 +21,17 @@ export class TimeinputComponent implements OnInit {
 
   @Input() timeType: TimeInputType;
 
-  currentTimeInput : TimeInput;
+  currentTimeInput: TimeInput;
   TimeInputType = TimeInputType;
 
-  timeInputs : any;
+  timeInputs: any;
 
   validateTimestamp(event) {
-    var value = event.target.value;
-    var validatedValue = validateTimestamp(value);
-    if (!isNaN(validatedValue))
-      this.currentTimeInput.startTime = validatedValue;  
+    let value = event.target.value;
+    let validatedValue = validateTimestamp(value);
+    if (!isNaN(validatedValue)) {
+      this.currentTimeInput.startTime = validatedValue;
+    }
   }
 
   set newType(type: TimeInputType) {
@@ -42,7 +43,7 @@ export class TimeinputComponent implements OnInit {
     return this.timeType;
   }
 
-  constructor() { 
+  constructor() {
     this.timeInputs = { // should match TimeInputType!!
       0: new TimeInputDuration(),
       1: new TimeInputStartEnd(),
@@ -55,7 +56,7 @@ export class TimeinputComponent implements OnInit {
     this.currentTimeInput = this.timeInputs[this.timeType];
   }
 
-  
+
 
   ngOnInit() {
     this.currentTimeInput = this.timeInputs[this.timeType];
