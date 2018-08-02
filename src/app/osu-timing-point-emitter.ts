@@ -125,6 +125,9 @@ export function emitTargets(
     builtin.currentCycle = currentCycle;
     builtin.cycleCount = cycleCount;
 
+    // builtin.spanPerCycle = timeInput.cycleDuration;
+    // builtin.spanPerDivision = divisors.
+
     return builtin;
   }
 
