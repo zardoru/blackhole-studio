@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { TimeinputComponent } from '../timeinput/timeinput.component';
-import { DivisorinputComponent } from '../divisorinput/divisorinput.component';
-import { SvFunction } from '../sv-functions';
-import { TimingPointTemplateComponent } from '../timing-point-template/timing-point-template.component';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {TimeinputComponent} from '../timeinput/timeinput.component';
+import {DivisorinputComponent} from '../divisorinput/divisorinput.component';
+import {SvFunction, SvFunctionType} from '../sv-functions';
+import {TimingPointTemplateComponent} from '../timing-point-template/timing-point-template.component';
 import {MatDialog} from '@angular/material';
 import {emitTargets} from '../osu-timing-point-emitter';
+import {SelectEmissionFunctionComponent} from '../select-emission-function/select-emission-function.component';
+import {EmissionFunctionParametersAssignmentComponent} from '../emission-function-parameters-assignment/emission-function-parameters-assignment.component';
 
 @Component({
   selector: 'app-emission-control',
@@ -28,36 +30,92 @@ export class EmissionControlComponent implements OnInit {
 
   output: string;
 
+  error: any;
+
   constructor(public dialog: MatDialog) {
     this.bpm = 120;
+    this.error = null;
+    this.output = '';
     // this.output = "hello world";
-   }
+  }
 
-   selectFunction(isForTimeDeformation: boolean) {
+  selectFunction(isForTimeDeformation: boolean) {
+    if (isForTimeDeformation) {
+      const funcDialog = this.dialog.open(SelectEmissionFunctionComponent, {
+        data: {
+          allowedFunctionTypes: [SvFunctionType.SV]
+        }
+      });
 
+      funcDialog.afterClosed().subscribe((x) => {
+        this.currentTimeFunction = x;
+      });
 
-   }
+    } else {
+      const funcDialog = this.dialog.open(SelectEmissionFunctionComponent, {
+        data: {
+          allowedFunctionTypes: [SvFunctionType.SV, SvFunctionType.BPM]
+        }
+      });
 
-   emit() {
-     const timeInput = this.timeInput.currentTimeInput;
-     const divInput = this.divisorInput.currentDivisorInput;
-     const timingDefault = this.timingPointTemplate.currentTimingPoint;
+      funcDialog.afterClosed().subscribe((x) => {
+        this.currentFunction = x;
+      });
+    }
+  }
 
-     console.log(timeInput);
-     console.log(divInput);
-     console.log(timingDefault);
+  setParameters(isForTimeDeformation: boolean) {
 
-     const result = emitTargets(
-       timeInput,
-       divInput,
-       this.currentFunction,
-       this.currentTimeFunction,
-       timingDefault,
-       this.bpm
-     );
+    if (isForTimeDeformation) {
 
-     this.output = result.join('\n');
-   }
+      this.dialog.open(EmissionFunctionParametersAssignmentComponent, {
+        height: "400px",
+        width: "800px",
+        data: {
+          target: this.currentTimeFunction
+        }
+      });
+
+    } else {
+
+      this.dialog.open(EmissionFunctionParametersAssignmentComponent, {
+        height: "400px",
+        width: "800px",
+        data: {
+          target: this.currentFunction
+        }
+      });
+
+    }
+  }
+
+  emit() {
+    const timeInput = this.timeInput.currentTimeInput;
+    const divInput = this.divisorInput.currentDivisorInput;
+    const timingDefault = this.timingPointTemplate.currentTimingPoint;
+
+    //console.log(timeInput);
+    //console.log(divInput);
+    //console.log(timingDefault);
+
+    try {
+      const result = emitTargets(
+        timeInput,
+        divInput,
+        this.currentFunction,
+        this.currentTimeFunction,
+        timingDefault,
+        this.bpm
+      );
+
+      this.output = result.join('\n');
+      this.error = null;
+    } catch (err) {
+      console.log(err);
+
+      this.error = err;
+    }
+  }
 
   ngOnInit() {
   }

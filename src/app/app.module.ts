@@ -31,7 +31,9 @@ import { SelectFunctionDialogComponent } from './select-function-dialog/select-f
 import { DeleteFunctionDialogComponent } from './delete-function-dialog/delete-function-dialog.component';
 import { TimingPointTemplateComponent } from './timing-point-template/timing-point-template.component';
 import { SelectEmissionFunctionComponent } from './select-emission-function/select-emission-function.component';
-import { EmissionFunctionParametersAssignmentComponent } from './emission-function-parameters-assignment/emission-function-parameters-assignment.component';
+import {
+  EmissionFunctionParametersAssignmentComponent
+} from './emission-function-parameters-assignment/emission-function-parameters-assignment.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +71,9 @@ import { EmissionFunctionParametersAssignmentComponent } from './emission-functi
   providers: [],
   entryComponents: [
     SelectFunctionDialogComponent,
-    DeleteFunctionDialogComponent
+    DeleteFunctionDialogComponent,
+    SelectEmissionFunctionComponent,
+    EmissionFunctionParametersAssignmentComponent
   ],
   bootstrap: [AppComponent]
 })

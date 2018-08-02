@@ -34,7 +34,7 @@ export let builtinSv = {
             'description': 'Amplitude. How much to move away from the center.',
             'defaultValue': '0.2'
         }],
-        'body': '(() => {\n    return (x) => {\n        var angle = 2 * Math.PI * x;\n        var sineval = param.amplitude * Math.sin(angle) + param.center;\n        return sineval;\n    }; \n})()',
+        'body': '(() => {\n    return (x, params) => {\n        var angle = 2 * Math.PI * x;\n        var sineval = params.amplitude * Math.sin(angle) + params.center;\n        return sineval;\n    }; \n})()',
         'name': 'Sine Scrolling',
         'tooltip': '',
         'description': 'Smooth sine scrolling. Waves around center point.'

@@ -131,8 +131,8 @@ export function emitTargets(
   const userFunctionSV = svFunction ? eval(svFunction.body) : null;
   const userFunctionTime = timeFunction ? eval(timeFunction.body) : null;
 
-  const varsSv: any = svFunction ? svFunction.getCurrentParameters() : {};
-  const varsTime: any = timeFunction ? timeFunction.getCurrentParameters() : {};
+  const varsSv: any = svFunction ? SvFunction.getCurrentParameters(svFunction) : {};
+  const varsTime: any = timeFunction ? SvFunction.getCurrentParameters(timeFunction) : {};
 
   for (let i = 0; i < cycleCount; i++) {
     const builtin = generateStaticBuiltinVariables(i);

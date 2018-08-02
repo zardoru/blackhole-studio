@@ -63,9 +63,9 @@ export class SvFunction {
         this.tooltip = '';
     }
 
-    getCurrentParameters(): any {
+    static getCurrentParameters(it: any): any {
       const ret: any = {};
-      for (const param of this.parameters) {
+      for (const param of it.parameters) {
         ret[param.name] = param.currentValue || param.defaultValue;
       }
 

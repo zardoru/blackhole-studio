@@ -100,7 +100,9 @@ export abstract class TimeInputNotetime extends TimeInput {
             valset.add(parseInt(match[1], 10));
         }
 
-        this.noteTimes = Array.from(valset);
+        this.noteTimes = Array.from(valset).sort((a, b) => {
+          return a - b;
+        });
     }
 
     get notes(): string {

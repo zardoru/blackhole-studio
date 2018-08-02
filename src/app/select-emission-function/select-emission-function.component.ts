@@ -21,11 +21,20 @@ export class SelectEmissionFunctionComponent implements OnInit {
 
     this.collection = [];
 
+    // console.log(this.SvFunctionType);
+
     const typeSet = new Set(data.allowedFunctionTypes);
+    // console.log(typeSet);
 
     const funcCollection = SvFunctionCollection.getCollection();
-    for (const func of funcCollection) {
+    // console.log(funcCollection);
+    for (var key in funcCollection) {
+      const func = funcCollection[key];
       const isSvFunction = func.type === undefined || func.type === SvFunctionType.SV;
+
+      // console.log(func);
+      // console.log(isSvFunction);
+
       // only allowed functions are displayed in this dialog
       if ((isSvFunction && typeSet.has(SvFunctionType.SV) ||
           typeSet.has(func.type))) {

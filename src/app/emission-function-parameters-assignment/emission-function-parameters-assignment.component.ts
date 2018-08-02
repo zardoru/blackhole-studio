@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material';
+import {SvFunction} from '../sv-functions';
 
 @Component({
   selector: 'app-emission-function-parameters-assignment',
@@ -7,7 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EmissionFunctionParametersAssignmentComponent implements OnInit {
 
-  constructor() { }
+  target: SvFunction;
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+    console.log(data.target);
+    this.target = data.target;
+
+    for (let i = 0; i < this.target.parameters.length; i++) {
+      if (!this.target.parameters[i].currentValue) {
+        const val: any = parseFloat(this.target.parameters[i].defaultValue) ||
+                         this.target.parameters[i].defaultValue;
+
+        this.target.parameters[i].currentValue = val;
+      }
+    }
+  }
 
   ngOnInit() {
   }

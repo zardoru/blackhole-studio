@@ -35,8 +35,13 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-12 text-center">
+            <div class="col-md-6 text-center">
               <button mat-raised-button (click)="selectFunction(false)">Select function</button>
+            </div>
+            <div class="col-md-4 text-center">
+              <button mat-raised-button (click)="setParameters(false)" [disabled]="!currentFunction">
+                Set Parameters
+              </button>
             </div>
           </div>
         </div>
@@ -56,8 +61,13 @@
         </div>
 
         <div class="row">
-          <div class="col-md-12 text-center">
+          <div class="col-md-6 text-center">
             <button mat-raised-button (click)="selectFunction(true)">Select function</button>
+          </div>
+          <div class="col-md-4 text-center">
+            <button mat-raised-button (click)="setParameters(false)" [disabled]="!currentTimeFunction">
+              Set Parameters
+            </button>
           </div>
         </div>
 
@@ -70,6 +80,21 @@
       </mat-card>
     </div>
   </div>
+
+  <br>
+
+  <div class="row" *ngIf="error">
+    <div class="col-md-2"></div>
+    <div class="alert alert-danger col-md-8">
+      <strong>Error: </strong>
+      <br>
+      <b>line:</b> {{ error.lineNumber }} <br>
+      <b>message: </b>  <br>
+      {{ error.message }}
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+
   <br>
   <div class="row">
     <div class="col-md-12 padder">
@@ -78,6 +103,7 @@
           Output area
         </mat-card-title>
         <button mat-raised-button (click)="output = ''">Clear...</button>
+        <button mat-raised-button (click)="outputArea.select()">Select all</button>
         <textarea matInput #outputArea readonly placeholder="output will be here" [value]="output"></textarea>
       </mat-card>
     </div>

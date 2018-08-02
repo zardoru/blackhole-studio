@@ -1,8 +1,8 @@
 <mat-dialog-content>
   <h2 matDialogTitle>Select emission function...</h2>
   <mat-select [(ngModel)]="selectedFunction">
-    <mat-option *ngFor="let func of collection">
-      {{ SvFunctionType[func.type] }} - {{ func.name }}
+    <mat-option *ngFor="let func of collection" [value]="func">
+      {{ SvFunctionType[func.type || 0] }} - {{ func.name }}
     </mat-option>
   </mat-select>
 
