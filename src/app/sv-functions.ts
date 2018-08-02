@@ -1,3 +1,5 @@
+import { builtinSv } from "./builtin-sv-functions";
+
 export class SvParameter {
     name: string;
     description: string;
@@ -18,6 +20,9 @@ export class SvFunction {
     tooltip: string;
     body: string;
     parameters: SvFunctionParams;
+    isBpm: boolean;
+
+    static defaultName = "unnamed";
 
     constructor() {
         this.parameters = [];
@@ -32,19 +37,19 @@ export class SvFunction {
         return 1; 
     }
 })();`; 
+        this.name = SvFunction.defaultName;
+        this.tooltip = "";
     }
 }
 
 export class SvFunctionCollection
 {
-    functions: SvFunction[];
+    static getCollection() {
+        return JSON.parse(localStorage.getItem("svCollection")) || builtinSv || {};
+    }
 
-    getFunctionByName(name: string) : SvFunction {
-        for (var func of this.functions) {
-            if (func.name === name) return func;
-        }
-
-        return null;
+    static setCollection(obj: any) {
+        return localStorage.setItem("svCollection", JSON.stringify(obj));
     }
 
     constructor() {

@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Delete function...</h2>
+<mat-dialog-content>
+  <div class="row" *ngFor="let func of collection">
+    <div class="col-md-8">
+      {{ func.name }}
+    </div>
+    <div class="col-md-4">
+      <button mat-button (click)="removeFunc(func)">Delete</button>
+    </div>
+  </div>
+
+  <br>
+  Functions will not be removed unless you click <b>Apply!</b>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="commitAndClose()">Apply</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

@@ -1,5 +1,5 @@
 <div *ngIf="isFixedDuration">
-  <mat-form-field>
+  <mat-form-field class="fullwidth">
     <mat-select [(ngModel)]="innerTimeType" placeholder="Cycle Time Type">
       <mat-option [value]="TimeInputType.Duration">
         Duration (MS)
@@ -18,6 +18,6 @@
 
 <br>
 
-<mat-form-field>
+<mat-form-field class="fullwidth">
   <textarea matInput [(ngModel)]="currentTimeInput.notes" placeholder="Note data (paste from osu editor)"></textarea>
 </mat-form-field>

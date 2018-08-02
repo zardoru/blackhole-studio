@@ -1,0 +1,34 @@
+<mat-form-field class="fullwidth">
+    <mat-select [(ngModel)]="currentTimingPoint.sampleSet" placeholder="Sample Set">
+        <mat-option [value]="SampleSet.Auto">
+          Auto
+        </mat-option>
+        <mat-option [value]="SampleSet.Normal">
+          Normal
+        </mat-option>
+        <mat-option [value]="SampleSet.Soft">
+          Soft
+        </mat-option>
+        <mat-option [value]="SampleSet.Drum">
+          Drum
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+<mat-form-field class="fullwidth">
+  <input matInput type="number" placeholder="Volume" [(ngModel)]="currentTimingPoint.volume">
+</mat-form-field>
+
+<mat-form-field class="fullwidth">
+  <input matInput type="number" placeholder="Sampleset Index" [(ngModel)]="currentTimingPoint.sampleIndex">
+</mat-form-field>
+
+<mat-form-field class="fullwidth">
+  <input matInput type="number" placeholder="Measure Length" [(ngModel)]="currentTimingPoint.measureLength">
+</mat-form-field>
+
+<br>
+
+<mat-checkbox [(ngModel)]="currentTimingPoint.kiai">
+  Kiai
+</mat-checkbox>

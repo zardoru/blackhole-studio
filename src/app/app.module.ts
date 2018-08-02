@@ -12,7 +12,10 @@ import {
   MatMenuModule,
   MatButtonModule,
   MatTabsModule,
-  MatTableModule
+  MatTableModule,
+  MatDialogModule,
+  MatCheckboxModule,
+  MatToolbarModule
 } from "@angular/material";
 import { TimeinputDurationComponent } from './timeinput-duration/timeinput-duration.component';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -24,6 +27,9 @@ import { EmissionControlComponent } from './emission-control/emission-control.co
 import { FunctionEditorComponent } from './function-editor/function-editor.component';
 
 import { AceEditorModule } from 'ng2-ace-editor';
+import { SelectFunctionDialogComponent } from './select-function-dialog/select-function-dialog.component';
+import { DeleteFunctionDialogComponent } from './delete-function-dialog/delete-function-dialog.component';
+import { TimingPointTemplateComponent } from './timing-point-template/timing-point-template.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +41,10 @@ import { AceEditorModule } from 'ng2-ace-editor';
     TimeinputStartendComponent,
     DivisorinputComponent,
     EmissionControlComponent,
-    FunctionEditorComponent
+    FunctionEditorComponent,
+    SelectFunctionDialogComponent,
+    DeleteFunctionDialogComponent,
+    TimingPointTemplateComponent
   ],
   imports: [
     BrowserModule,
@@ -47,10 +56,17 @@ import { AceEditorModule } from 'ng2-ace-editor';
     MatButtonModule,
     MatTabsModule,
     MatTableModule,
+    MatDialogModule,
+    MatCheckboxModule,
+    MatToolbarModule,
     BrowserAnimationsModule,
     AceEditorModule
   ],
   providers: [],
+  entryComponents: [ 
+    SelectFunctionDialogComponent, 
+    DeleteFunctionDialogComponent 
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

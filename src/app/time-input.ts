@@ -1,10 +1,10 @@
-import { DivisorInput } from "./divisor-input";
-import { ArgumentOutOfRangeError } from "rxjs";
+import {DivisorInput} from './divisor-input';
+import {ArgumentOutOfRangeError} from 'rxjs';
 
 export abstract class TimeInput {
-    startTime: number; 
+    startTime: number;
     cycleCount: number;
-    abstract getDuration(cycleIndex: number) : number;
+    abstract getDuration(cycleIndex: number): number;
 
     abstract get autocycle(); // whether this time input mode calculates cycles automatically
     abstract get isConstantCycleTime();
@@ -13,111 +13,139 @@ export abstract class TimeInput {
         return this.getDuration(0);
     }
 
-    createCycle(index : number, divisor : DivisorInput, timeDeformFunction) {
-        var effectiveStartTime = index * this.getDuration(index) + this.startTime;
-        
+    protected constructor() {
+        this.startTime = 0;
+        this.cycleCount = 1;
+    }
+
+    createCycle(index: number, divisor: DivisorInput, timeDeformFunction) {
+        const effectiveStartTime = index * this.getDuration(index) + this.startTime;
+
         return divisor.generateSpanDivisors(
-            effectiveStartTime, 
-            this.getDuration(index), 
+            effectiveStartTime,
+            this.getDuration(index),
             timeDeformFunction
         );
     }
 }
 
-export class TimeInputDuration extends TimeInput
-{
+export class TimeInputDuration extends TimeInput {
     duration: number;
 
-    get autocycle() { return false };
-    get isConstantCycleTime() { return true };
+    get autocycle() { return false; }
+    get isConstantCycleTime() { return true; }
 
     getDuration(cycleIndex: number): number {
         return this.duration;
     }
-}
 
-export class TimeInputStartEnd extends TimeInput
-{
-    endTime: number;
-
-    get autocycle() { return false };
-    get isConstantCycleTime() { return true };
-
-    getDuration(cycleIndex: number): number {
-        return this.endTime - this.startTime; 
+    constructor() {
+        super();
+        this.duration = 0;
     }
 }
 
-export class TimeInputBeats extends TimeInput
-{
+export class TimeInputStartEnd extends TimeInput {
+    endTime: number;
+
+    get autocycle() { return false; }
+    get isConstantCycleTime() { return true; }
+
+    getDuration(cycleIndex: number): number {
+        return this.endTime - this.startTime;
+    }
+
+    constructor() {
+        super();
+        this.endTime = 0;
+    }
+}
+
+export class TimeInputBeats extends TimeInput {
     beats: number;
     bpm: number;
 
-    get autocycle() { return false };
-    get isConstantCycleTime() { return true };
+    get autocycle() { return false; }
+    get isConstantCycleTime() { return true; }
 
     getDuration(cycleIndex: number): number {
         return 1000 * 60 / this.bpm * this.beats;
     }
+
+    constructor() {
+        super();
+        this.beats = 1;
+        this.bpm = 120;
+    }
 }
 
-export abstract class TimeInputNotetime extends TimeInput
-{
-    get autocycle() { return true };
+export abstract class TimeInputNotetime extends TimeInput {
+    get autocycle() { return true; }
 
     noteTimes: number[];
 
     _notes: string;
     set notes(value: string) {
         this._notes = value;
+
+        const valset = new Set();
+
+        // parse from this syntax
+        // time - (time|discarded,...)
+
+        const re = /(\d+)\|\d+/g;
+        let match;
+        while ( (match = re.exec(value)) != null ) {
+            valset.add(parseInt(match[1], 10));
+        }
+
+        this.noteTimes = Array.from(valset);
     }
 
-    get notes() : string {
+    get notes(): string {
         return this._notes;
     }
 
-    constructor() {
+    protected constructor() {
         super();
         this.noteTimes = [];
     }
 }
 
-export class TimeInputNotetimeFixedDuration extends TimeInputNotetime
-{
+export class TimeInputNotetimeFixedDuration extends TimeInputNotetime {
     duration: number;
 
-    get isConstantCycleTime() { return true };
+    get isConstantCycleTime() { return true; }
 
     getDuration(cycleIndex: number): number {
-        if (this.noteTimes.length == 0) return this.duration;
-        if (cycleIndex < 0) throw new ArgumentOutOfRangeError();
-        if (cycleIndex >= this.noteTimes.length) throw new ArgumentOutOfRangeError();
+        if (this.noteTimes.length === 0) { return this.duration; }
+        if (cycleIndex < 0) { throw new ArgumentOutOfRangeError(); }
+        if (cycleIndex >= this.noteTimes.length) { throw new ArgumentOutOfRangeError(); }
 
-        var spanToNext : number;
-        if (cycleIndex == this.noteTimes.length - 1)
+        let spanToNext: number;
+        if (cycleIndex === this.noteTimes.length - 1) {
             spanToNext = Infinity;
-        else 
+        } else {
             spanToNext = this.noteTimes[cycleIndex + 1] - this.noteTimes[cycleIndex];
+        }
 
 
-        var mindur = Math.min(this.duration, spanToNext);
-
-        return mindur;
+      return Math.min(this.duration, spanToNext);
     }
 }
 
-export class TimeInputNotetimeVariedDuration extends TimeInputNotetime
-{
-    get isConstantCycleTime() { return false };
+export class TimeInputNotetimeVariedDuration extends TimeInputNotetime {
+    get isConstantCycleTime() { return false; }
 
     getDuration(cycleIndex: number): number {
-        if (!this.noteTimes) return 0;
-        if (this.noteTimes.length < 2) return 0;
-        if (cycleIndex < 0) throw new ArgumentOutOfRangeError();
-        if (cycleIndex >= this.noteTimes.length) throw new ArgumentOutOfRangeError();
+        if (!this.noteTimes) { return 0; }
+        if (this.noteTimes.length < 2) { return 0; }
+        if (cycleIndex < 0) { throw new ArgumentOutOfRangeError(); }
+        if (cycleIndex >= this.noteTimes.length) { throw new ArgumentOutOfRangeError(); }
 
-        if (cycleIndex == this.noteTimes.length - 1)
+        if (cycleIndex === this.noteTimes.length - 1) {
             return 0;
+        }
 
         return this.noteTimes[cycleIndex + 1] - this.noteTimes[cycleIndex];
     }
@@ -129,4 +157,4 @@ export enum TimeInputType {
     Beats,
     NotetimeFixed,
     NotetimeVaried
-};
+}

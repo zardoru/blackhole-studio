@@ -1,15 +1,26 @@
-<button mat-button [matMenuTriggerFor]="fileMenu">Collection</button>
+<div class="row">
+  <div class="col-md-9">
+    <b style="padding: 2%">Menu</b> <button mat-button [matMenuTriggerFor]="fileMenu">Collection</button>
+  </div>
+  <div class="col-md-3">
+    <div class="text-center">
+      <b>Working on:</b> {{ currentFunction.name }}
+    </div>
+  </div>
+</div>
 <mat-menu #fileMenu>
-  <button mat-menu-item>Load...</button>
-  <button mat-menu-item>Load...</button>
-  <button mat-menu-item>Save...</button>
-  <button mat-menu-item>Import...</button>
-  <button mat-menu-item>Export...</button>
+  <button mat-menu-item (click)="onNew()">New</button>
+  <button mat-menu-item (click)="onLoad()">Load...</button>
+  <button mat-menu-item (click)="onSave()">Save to collection...</button>
+  <button mat-menu-item (click)="onDelete()">Delete from collection...</button>
+  <button mat-menu-item>Import collection...</button>
+  <button mat-menu-item>Export collection</button>
 </mat-menu>
 
-<mat-tab-group [dynamicHeight]="true">
-  <mat-tab label="Code" class="main-content">
-    <div ace-editor [(text)]="currentFunction.body" [mode]="'javascript'" style="min-height: 540px" #editor>
+<mat-tab-group>
+  <mat-tab label="Code">
+    <div ace-editor [(text)]="currentFunction.body" [mode]="'javascript'" [theme]="'eclipse'" [options]="editorOptions" style="min-height: 540px"
+      #editor>
     </div>
 
   </mat-tab>
@@ -25,6 +36,7 @@
           <textarea matInput placeholder="Function description" [(ngModel)]="currentFunction.description">
         </textarea>
         </mat-form-field>
+        <mat-checkbox [(ngModel)]="currentFunction.isBpm">Is BPM function</mat-checkbox>
       </mat-card>
     </div>
 
@@ -32,6 +44,9 @@
 
     <div class="paramarea">
       <h2> Function Parameters </h2>
+      <br>
+      <button mat-raised-button (click)="addParam();">Add...</button>
+      <br>
 
       <table mat-table [dataSource]="currentFunction.parameters" #paramTable>
         <ng-container matColumnDef="paramName">
@@ -61,6 +76,15 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let el">
+            <button mat-button (click)="deleteParam(el)">
+              Remove
+            </button>
+          </td>
+        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
@@ -70,13 +94,12 @@
       </p>
 
       <br>
-      <button mat-raised-button (click)="addParam(); paramTable.refreshRows()">Add...</button>
-      <br>
+
     </div>
 
   </mat-tab>
   <mat-tab label="Reference">
-    <div class="padder">
+    <div class="padder col">
       <h2>Reference</h2>
       <ul>
         <li>
@@ -86,12 +109,12 @@
         <li>
           The
           <code>params.builtin</code> value contains some useful definitions, such as
-          <code>currentDivisor</code>
+          <code>currentDivisor</code>,
           <code>divisorCount</code>,
           <code>divisorBpm</code> (can be null),
           <code>cycleBpm</code> (can be null),
           <code>currentCycle</code>,
-          <code>cycleCount</code>
+          <code>cycleCount</code>,
           <code>spanPerDivision</code> in MS, and
           <code>spanPerCycle</code> in MS. Overwriting them changes the value for repeated calls.
         </li>

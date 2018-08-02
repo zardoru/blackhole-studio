@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DivisorInput, DivisorInputFixed, DivisorInputBPM, DivisorInputType } from '../divisor-input';
+import { DivisorInput, DivisorInputFixed, DivisorInputBPM, DivisorInputType, DivisorInputSpan } from '../divisor-input';
 
 @Component({
   selector: 'app-divisorinput',
@@ -24,6 +24,8 @@ export class DivisorinputComponent implements OnInit {
       this.currentDivisorInput = new DivisorInputFixed();
     if (this.type === DivisorInputType.BPM)
       this.currentDivisorInput = new DivisorInputBPM();
+    if (this.type === DivisorInputType.Span)
+      this.currentDivisorInput = new DivisorInputSpan();
   }
 
   ngOnInit() {
