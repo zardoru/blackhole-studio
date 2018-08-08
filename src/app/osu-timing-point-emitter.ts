@@ -105,7 +105,8 @@ export function emitTargets(
   svFunction: SvFunction,
   timeFunction: SvFunction,
   defaultTimingPoint: OsuTimingPoint,
-  fixedBpm: number): string[] {
+  fixedBpm: number,
+  includeDivisorAtEnd: boolean): string[] {
   let output: string[] = [];
   const cycleCount = timeInput.cycleCount;
 
@@ -142,7 +143,13 @@ export function emitTargets(
     varsSv.builtin = builtin;
     varsTime.builtin = builtin;
 
-    const cycleData = timeInput.createCycle(i, divisors, userFunctionTime, varsTime);
+    const cycleData = timeInput.createCycle(
+      i, 
+      divisors, 
+      userFunctionTime, 
+      varsTime,
+      includeDivisorAtEnd && i == cycleCount - 1
+    );
 
     let cycleResult: TimingList;
 

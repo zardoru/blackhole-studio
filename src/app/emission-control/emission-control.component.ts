@@ -32,6 +32,8 @@ export class EmissionControlComponent implements OnInit {
 
   error: any;
 
+  includeDivisorAtEnd: boolean;
+
   constructor(public dialog: MatDialog) {
     this.bpm = 120;
     this.error = null;
@@ -105,7 +107,8 @@ export class EmissionControlComponent implements OnInit {
         this.currentFunction,
         this.currentTimeFunction,
         timingDefault,
-        this.bpm
+        this.bpm,
+        this.includeDivisorAtEnd
       );
 
       this.output = result.join('\n');
@@ -115,6 +118,17 @@ export class EmissionControlComponent implements OnInit {
 
       this.error = err;
     }
+  }
+
+  get currentDivisors() {
+    var di = this.divisorInput.currentDivisorInput;
+    var ti = this.timeInput.currentTimeInput;
+    var arr = new Set();
+    for (var i = 0; i < ti.cycleCount; i++) {
+      arr.add(Math.floor(di.getSpanDivisorCount(ti.getDuration(i))));
+    }
+
+    return Array.from(arr).join(", ");
   }
 
   ngOnInit() {

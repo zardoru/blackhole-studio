@@ -18,14 +18,20 @@ export abstract class TimeInput {
         this.cycleCount = 1;
     }
 
-    createCycle(index: number, divisor: DivisorInput, timeDeformFunction, funcVars: any) {
+    createCycle(
+        index: number, 
+        divisor: DivisorInput, 
+        timeDeformFunction, 
+        funcVars: any, 
+        generateLastPoint: boolean) {
         const effectiveStartTime = index * this.getDuration(index) + this.startTime;
 
         return divisor.generateSpanDivisors(
             effectiveStartTime,
             this.getDuration(index),
             timeDeformFunction,
-            funcVars
+            funcVars,
+            generateLastPoint
         );
     }
 }
@@ -103,6 +109,8 @@ export abstract class TimeInputNotetime extends TimeInput {
         this.noteTimes = Array.from(valset).sort((a, b) => {
           return a - b;
         });
+
+        this.cycleCount = this.noteTimes.length - 1;
     }
 
     get notes(): string {

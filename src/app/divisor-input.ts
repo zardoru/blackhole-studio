@@ -4,11 +4,16 @@ export type Cycle = CycleDivision[];
 export abstract class DivisorInput {
     abstract getSpanDivisorCount(span: number);
 
-    generateSpanDivisors(startTime, duration, timeWarpFunction, vars: any): Cycle {
+    generateSpanDivisors(
+        startTime: number, 
+        duration: number, 
+        timeWarpFunction, 
+        vars: any,
+        includeEndPoint: boolean): Cycle {
         const ret: Cycle = [];
-
         const count = this.getSpanDivisorCount(duration);
-        for (let i = 0; i < count; i++) {
+
+        function generateSpanDivisorsInner(i: number) {
             let fraction = i / count;
             fraction = timeWarpFunction && timeWarpFunction(fraction, vars) || fraction;
 
@@ -17,6 +22,13 @@ export abstract class DivisorInput {
                 fraction: fraction
             });
         }
+
+        for (let i = 0; i < count; i++) {
+            generateSpanDivisorsInner(i);
+        }
+
+        if (includeEndPoint)
+            generateSpanDivisorsInner(1);
 
         return ret;
     }
@@ -34,7 +46,7 @@ export class DivisorInputBPM extends DivisorInput {
         const beatsPerMs = this.bpm / 60000;
         const beats = beatsPerMs * spanMs;
         const divisorCount = Math.floor(beats * this.beatDivisor);
-        return divisorCount;
+        return divisorCount + 1;
     }
 
     constructor() {

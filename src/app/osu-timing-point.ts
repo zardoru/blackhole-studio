@@ -57,8 +57,12 @@ export class OsuTimingPoint {
         return this.kiai ? 1 : 0;
     }
 
+    get roundedTime() {
+        return Math.round(this.time);
+    }
+
     toString() {
-        return `${this.time},${this.value},${this.measureLength},` +
+        return `${this.roundedTime},${this.value},${this.measureLength},` +
                `${this.sampleSet},${this.sampleIndex},${this.volume},` +
                `${this.inheritedInt},${this.kiaiInt}`;
     }
