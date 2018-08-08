@@ -1,4 +1,4 @@
-import {DivisorInput} from './divisor-input';
+import {DivisorInput, CycleDivision} from './divisor-input';
 import {ArgumentOutOfRangeError} from 'rxjs';
 
 export abstract class TimeInput {
@@ -18,13 +18,17 @@ export abstract class TimeInput {
         this.cycleCount = 1;
     }
 
+    cycleStartTime(index: number) : number {
+        return index * this.cycleDuration + this.startTime;
+    }
+
     createCycle(
         index: number, 
         divisor: DivisorInput, 
         timeDeformFunction, 
         funcVars: any, 
-        generateLastPoint: boolean) {
-        const effectiveStartTime = index * this.getDuration(index) + this.startTime;
+        generateLastPoint: boolean) : CycleDivision[] {
+        const effectiveStartTime = this.cycleStartTime(index);
 
         return divisor.generateSpanDivisors(
             effectiveStartTime,
@@ -115,6 +119,10 @@ export abstract class TimeInputNotetime extends TimeInput {
 
     get notes(): string {
         return this._notes;
+    }
+
+    cycleStartTime(cycle: number) : number {
+        return this.noteTimes[cycle] - this.noteTimes[0] + this.startTime;
     }
 
     protected constructor() {

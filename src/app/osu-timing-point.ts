@@ -50,7 +50,7 @@ export class OsuTimingPoint {
     }
 
     get inheritedInt() {
-        return this.inherited ? 1 : 0;
+        return (this.inherited == true) ? 0 : 1;
     }
 
     get kiaiInt() {
@@ -76,7 +76,10 @@ export class OsuTimingPoint {
         ret.sampleSet = changes && changes.sampleSet || this.sampleSet;
         ret.sampleIndex = changes && changes.sampleIndex || this.sampleIndex;
         ret.measureLength = changes && changes.measureLength || this.measureLength;
-
+        if (changes && changes.inherited !== undefined)
+            ret.inherited = changes.inherited;
+        else 
+            ret.inherited = this.inherited;
         return ret;
     }
 }

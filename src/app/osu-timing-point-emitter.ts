@@ -17,7 +17,8 @@ export class OsuTimingPointEmitter {
         const point = defaultTimingPoint.applyDifference(
           {
             time: divisor.time,
-            value: 60000 / bpm
+            value: 60000 / bpm,
+            inherited: false
           });
 
         ret.push(point);
@@ -30,8 +31,6 @@ export class OsuTimingPointEmitter {
                            defaultTimingPoint: OsuTimingPoint,
                            bpmFunction: (number, any) => number): TimingList {
       const ret: TimingList = [];
-
-      defaultTimingPoint.inherited = false;
 
       let i = 0;
 
@@ -46,7 +45,8 @@ export class OsuTimingPointEmitter {
 
         const point = defaultTimingPoint.applyDifference({
           time: divisor.time,
-          value: 60000 / bpm
+          value: 60000 / bpm,
+          inherited: false
         });
 
         ret.push(point);
@@ -62,8 +62,6 @@ export class OsuTimingPointEmitter {
            svFunction: (number, any) => number): TimingList {
         const ret: TimingList = [];
 
-        // make sure it's inherited
-        defaultTimingPoint.inherited = true;
         let i = 0;
         let lastSv = NaN;
 
@@ -84,14 +82,15 @@ export class OsuTimingPointEmitter {
             // apply the differences to the timing point
             const point = defaultTimingPoint.applyDifference({
                     time: divisor.time,
-                    value: -100 / multiplier
+                    value: -100 / multiplier,
+                    inherited: true
                 });
 
             // don't repeat SV values! if it doesn't repeat, push it.
             if (multiplier !== lastSv) {
                 lastSv = multiplier;
                 ret.push(point);
-            }
+            } // else console.log("skipping value = " + lastSv, " fraction " + divisor.fraction);
         }
 
         return ret;
@@ -148,7 +147,7 @@ export function emitTargets(
       divisors, 
       userFunctionTime, 
       varsTime,
-      includeDivisorAtEnd && i == cycleCount - 1
+      includeDivisorAtEnd && (i == (cycleCount - 1))
     );
 
     let cycleResult: TimingList;

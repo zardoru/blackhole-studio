@@ -74,7 +74,7 @@ export let builtinSv = {
             'description': 'Rate the jitter should look like',
             'defaultValue': '1'
         }],
-        'body': '(() => {\n    return (x, params) => {\n        var div = 1 / (1 - params.duration);\n        var centerSv = (params.dstRate - params.startSv * params.duration) * div;\n        \n        if (x < params.duration) return params.startSv;\n        if (x >= params.duration) return centerSv;\n        if (x == 1) return params.dstRate;\n        return 1;\n    }; \n})()',
+        'body': '(() => {\n    return (x, params) => {\n        var div = 1 / (1 - params.duration);\n        var centerSv = (params.dstRate - params.startSv * params.duration) * div;\n        \n        if (x < params.duration) return params.startSv;\n        if (x >= params.duration && x < 1) return centerSv;\n        if (x == 1) return params.dstRate;\n        return 1;\n    }; \n})()',
         'name': 'Rate Jitter',
         'tooltip': '',
         'description': 'Jitter between two SV values that look like the target rate, given the first SV value.'

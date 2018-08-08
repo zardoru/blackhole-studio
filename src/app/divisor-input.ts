@@ -27,8 +27,9 @@ export abstract class DivisorInput {
             generateSpanDivisorsInner(i);
         }
 
-        if (includeEndPoint)
-            generateSpanDivisorsInner(1);
+        if (includeEndPoint) {
+            generateSpanDivisorsInner(count);
+        }
 
         return ret;
     }
