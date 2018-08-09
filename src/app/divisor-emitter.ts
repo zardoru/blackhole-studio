@@ -1,13 +1,13 @@
-export interface CycleDivision {time: number, fraction: number}
+export interface CycleDivision {time: number; fraction: number;}
 export type Cycle = CycleDivision[];
 
-export abstract class DivisorInput {
+export abstract class DivisorEmitter {
     abstract getSpanDivisorCount(span: number);
 
     generateSpanDivisors(
-        startTime: number, 
-        duration: number, 
-        timeWarpFunction, 
+        startTime: number,
+        duration: number,
+        timeWarpFunction,
         vars: any,
         includeEndPoint: boolean): Cycle {
         const ret: Cycle = [];
@@ -35,7 +35,7 @@ export abstract class DivisorInput {
     }
 }
 
-export class DivisorInputBPM extends DivisorInput {
+export class DivisorEmitterBeatFraction extends DivisorEmitter {
     bpm: number;
     beatDivisor: number; // whole number 1, 2, 4, etc...
 
@@ -57,7 +57,7 @@ export class DivisorInputBPM extends DivisorInput {
     }
 }
 
-export class DivisorInputFixed extends DivisorInput {
+export class DivisorEmitterByCount extends DivisorEmitter {
     count: number;
 
     getSpanDivisorCount(span: number) {
@@ -70,7 +70,7 @@ export class DivisorInputFixed extends DivisorInput {
     }
 }
 
-export class DivisorInputSpan extends DivisorInput {
+export class DivisorEmitterTimeSpan extends DivisorEmitter {
     span: number;
 
     getSpanDivisorCount(span: number) {

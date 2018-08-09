@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TimeInputType } from "./time-input";
+import { CycleEmissionType } from "./cycle-time-emitter";
 import { SvFunctionCollection } from './sv-functions';
 
 @Component({
@@ -9,7 +9,7 @@ import { SvFunctionCollection } from './sv-functions';
 })
 export class AppComponent implements OnInit {
   title = 'blackhole';
-  timeInputType = TimeInputType
+  timeInputType = CycleEmissionType
   svFunctions: SvFunctionCollection;
 
   constructor() {

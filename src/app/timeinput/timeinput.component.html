@@ -1,18 +1,21 @@
 <mat-form-field class="fullwidth">
   <mat-select [(ngModel)]="newType" placeholder="Model type...">
-    <mat-option [value]="TimeInputType.Duration">
+    <mat-option [value]="TimeInputType.Span">
       Duration (MS)
     </mat-option>
-    <mat-option [value]="TimeInputType.StartEnd">
+    <mat-option [value]="TimeInputType.Delta">
       Start-End time pair
     </mat-option>
     <mat-option [value]="TimeInputType.Beats">
       Beats
     </mat-option>
-    <mat-option [value]="TimeInputType.NotetimeFixed">
+    <mat-option [value]="TimeInputType.BeatDivision">
+      Beat fractions
+    </mat-option>
+    <mat-option [value]="TimeInputType.NotetimeSpan">
       Based on notes (fixed duration)
     </mat-option>
-    <mat-option [value]="TimeInputType.NotetimeVaried">
+    <mat-option [value]="TimeInputType.NoteToNote">
       Based on notes (note to note)
     </mat-option>
   </mat-select>
@@ -30,17 +33,20 @@
 </mat-form-field>
 <br/>
 
-<app-timeinput-duration [currentTimeInput]="currentTimeInput" *ngIf="timeType == TimeInputType.Duration">
+<app-timeinput-duration [currentTimeInput]="currentTimeInput" *ngIf="timeType == TimeInputType.Span">
 </app-timeinput-duration>
 
-<app-timeinput-startend [currentTimeInput]="currentTimeInput" *ngIf="timeType == TimeInputType.StartEnd">
+<app-timeinput-startend [currentTimeInput]="currentTimeInput" *ngIf="timeType == TimeInputType.Delta">
 </app-timeinput-startend>
 
 <app-timeinput-beats [currentTimeInput]="currentTimeInput" *ngIf="timeType == TimeInputType.Beats">
 </app-timeinput-beats>
 
-<app-timeinput-notetimes [currentTimeInput]="currentTimeInput" *ngIf="timeType == TimeInputType.NotetimeFixed || timeType == TimeInputType.NotetimeVaried">
+<app-timeinput-notetimes [currentTimeInput]="currentTimeInput" *ngIf="timeType == TimeInputType.NotetimeSpan || timeType == TimeInputType.NoteToNote">
 </app-timeinput-notetimes>
+
+<app-timeinput-beatfraction [currentTimeInput]="currentTimeInput" *ngIf="timeType == TimeInputType.BeatDivision">
+</app-timeinput-beatfraction>
 
 <div *ngIf="currentTimeInput.isConstantCycleTime" class="alert alert-secondary">
   <b>Used Cycle Time (MS):</b> {{ currentTimeInput.cycleDuration }}

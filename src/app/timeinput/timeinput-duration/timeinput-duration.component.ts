@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TimeInputDuration } from '../time-input';
+import { CycleTimeMsDuration } from '../../cycle-time-emitter';
 
 @Component({
   selector: 'app-timeinput-duration',
@@ -8,7 +8,7 @@ import { TimeInputDuration } from '../time-input';
 })
 export class TimeinputDurationComponent implements OnInit {
 
-  @Input() currentTimeInput: TimeInputDuration;
+  @Input() currentTimeInput: CycleTimeMsDuration;
 
   constructor() { }
 

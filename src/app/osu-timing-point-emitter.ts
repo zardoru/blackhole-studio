@@ -1,6 +1,6 @@
 import { OsuTimingPoint } from './osu-timing-point';
-import {Cycle, DivisorInput, DivisorInputBPM} from './divisor-input';
-import {TimeInput, TimeInputBeats} from './time-input';
+import {Cycle, DivisorEmitter, DivisorEmitterBeatFraction} from './divisor-emitter';
+import {CycleTimeEmitter, CycleTimeBeats} from './cycle-time-emitter';
 import {SvFunction} from './sv-functions';
 
 type TimingList = OsuTimingPoint[];
@@ -99,8 +99,8 @@ export class OsuTimingPointEmitter {
 
 
 export function emitTargets(
-  timeInput: TimeInput,
-  divisors: DivisorInput,
+  timeInput: CycleTimeEmitter,
+  divisors: DivisorEmitter,
   svFunction: SvFunction,
   timeFunction: SvFunction,
   defaultTimingPoint: OsuTimingPoint,
@@ -113,13 +113,13 @@ export function emitTargets(
     const builtin: any = {};
 
     builtin.divisorBpm = null;
-    if (divisors instanceof DivisorInputBPM) {
-      builtin.divisorBpm = (divisors as DivisorInputBPM).bpm;
+    if (divisors instanceof DivisorEmitterBeatFraction) {
+      builtin.divisorBpm = (divisors as DivisorEmitterBeatFraction).bpm;
     }
 
     builtin.cycleBpm = null;
-    if (timeInput instanceof TimeInputBeats) {
-      builtin.cycleBpm = (timeInput as TimeInputBeats).bpm;
+    if (timeInput instanceof CycleTimeBeats) {
+      builtin.cycleBpm = (timeInput as CycleTimeBeats).bpm;
     }
 
     builtin.currentCycle = currentCycle;

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TimeInputBeats } from '../time-input';
+import { CycleTimeBeats } from '../../cycle-time-emitter';
 
 @Component({
   selector: 'app-timeinput-beats',
@@ -8,7 +8,7 @@ import { TimeInputBeats } from '../time-input';
 })
 export class TimeinputBeatsComponent implements OnInit {
 
-  @Input() currentTimeInput: TimeInputBeats;
+  @Input() currentTimeInput: CycleTimeBeats;
 
   constructor() { }
 

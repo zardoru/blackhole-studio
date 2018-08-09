@@ -1,0 +1,11 @@
+<mat-form-field class="fullwidth">
+  <input matInput type="number" placeholder="BPM" [(ngModel)]="currentTimeInput.bpm">
+</mat-form-field>
+
+<mat-form-field class="fullwidth">
+  <input matInput type="number" [(ngModel)]="currentTimeInput.beatDivisor" placeholder="Beat parts per cycle">
+</mat-form-field>
+
+<mat-form-field class="fullwidth">
+  <input matInput type="number" [(ngModel)]="currentTimeInput.totalBeats" placeholder="Total duration (beats)">
+</mat-form-field>

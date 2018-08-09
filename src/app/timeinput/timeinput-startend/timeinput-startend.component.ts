@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TimeInputStartEnd } from '../time-input';
-import { validateTimestamp } from '../osu-timestamp';
+import { CycleTimeDeltatime } from '../../cycle-time-emitter';
+import { validateTimestamp } from '../../osu-timestamp';
 
 @Component({
   selector: 'app-timeinput-startend',
@@ -9,14 +9,14 @@ import { validateTimestamp } from '../osu-timestamp';
 })
 export class TimeinputStartendComponent implements OnInit {
 
-  @Input() currentTimeInput: TimeInputStartEnd;
+  @Input() currentTimeInput: CycleTimeDeltatime;
 
 
   validateTimestamp(event) {
-    var value = event.target.value;
-    var validatedValue = validateTimestamp(value);
+    const value = event.target.value;
+    const validatedValue = validateTimestamp(value);
     if (!isNaN(validatedValue))
-      this.currentTimeInput.endTime = validatedValue;  
+      this.currentTimeInput.endTime = validatedValue;
   }
 
   constructor() { }

@@ -1,13 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {
-  TimeInput,
-  TimeInputBeats,
-  TimeInputDuration,
-  TimeInputStartEnd,
-  TimeInputNotetimeFixedDuration,
-  TimeInputNotetimeVariedDuration,
-  TimeInputType
-} from '../time-input';
+  CycleTimeEmitter,
+  CycleTimeBeats,
+  CycleTimeMsDuration,
+  CycleTimeDeltatime,
+  CycleTimeNotetimeFixedDuration,
+  CycleTimeNoteToNote,
+  CycleEmissionType, CycleTimeBeatFraction
+} from '../cycle-time-emitter';
 import { validateTimestamp } from '../osu-timestamp';
 
 
@@ -19,22 +19,22 @@ import { validateTimestamp } from '../osu-timestamp';
 })
 export class TimeinputComponent implements OnInit {
 
-  @Input() timeType: TimeInputType;
+  @Input() timeType: CycleEmissionType;
 
-  currentTimeInput: TimeInput;
-  TimeInputType = TimeInputType;
+  currentTimeInput: CycleTimeEmitter;
+  TimeInputType = CycleEmissionType;
 
   timeInputs: any;
 
   validateTimestamp(event) {
-    let value = event.target.value;
-    let validatedValue = validateTimestamp(value);
+    const value = event.target.value;
+    const validatedValue = validateTimestamp(value);
     if (!isNaN(validatedValue)) {
       this.currentTimeInput.startTime = validatedValue;
     }
   }
 
-  set newType(type: TimeInputType) {
+  set newType(type: CycleEmissionType) {
     this.timeType = type;
     this.currentTimeInput = this.timeInputs[this.timeType];
   }
@@ -44,15 +44,16 @@ export class TimeinputComponent implements OnInit {
   }
 
   constructor() {
-    this.timeInputs = { // should match TimeInputType!!
-      0: new TimeInputDuration(),
-      1: new TimeInputStartEnd(),
-      2: new TimeInputBeats(),
-      3: new TimeInputNotetimeFixedDuration(),
-      4: new TimeInputNotetimeVariedDuration()
+    this.timeInputs = { // should match CycleEmissionType!!
+      0: new CycleTimeMsDuration(),
+      1: new CycleTimeDeltatime(),
+      2: new CycleTimeBeats(),
+      3: new CycleTimeBeatFraction(),
+      4: new CycleTimeNotetimeFixedDuration(),
+      5: new CycleTimeNoteToNote()
     };
 
-    this.timeType = TimeInputType.Duration;
+    this.timeType = CycleEmissionType.Span;
     this.currentTimeInput = this.timeInputs[this.timeType];
   }
 

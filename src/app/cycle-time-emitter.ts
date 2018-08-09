@@ -1,7 +1,7 @@
-import {DivisorInput, CycleDivision} from './divisor-input';
+import {DivisorEmitter, CycleDivision} from './divisor-emitter';
 import {ArgumentOutOfRangeError} from 'rxjs';
 
-export abstract class TimeInput {
+export abstract class CycleTimeEmitter {
     startTime: number;
     cycleCount: number;
     abstract getDuration(cycleIndex: number): number;
@@ -18,16 +18,16 @@ export abstract class TimeInput {
         this.cycleCount = 1;
     }
 
-    cycleStartTime(index: number) : number {
+    cycleStartTime(index: number): number {
         return index * this.cycleDuration + this.startTime;
     }
 
     createCycle(
-        index: number, 
-        divisor: DivisorInput, 
-        timeDeformFunction, 
-        funcVars: any, 
-        generateLastPoint: boolean) : CycleDivision[] {
+        index: number,
+        divisor: DivisorEmitter,
+        timeDeformFunction,
+        funcVars: any,
+        generateLastPoint: boolean): CycleDivision[] {
         const effectiveStartTime = this.cycleStartTime(index);
 
         return divisor.generateSpanDivisors(
@@ -40,7 +40,7 @@ export abstract class TimeInput {
     }
 }
 
-export class TimeInputDuration extends TimeInput {
+export class CycleTimeMsDuration extends CycleTimeEmitter {
     duration: number;
 
     get autocycle() { return false; }
@@ -56,7 +56,7 @@ export class TimeInputDuration extends TimeInput {
     }
 }
 
-export class TimeInputStartEnd extends TimeInput {
+export class CycleTimeDeltatime extends CycleTimeEmitter {
     endTime: number;
 
     get autocycle() { return false; }
@@ -72,7 +72,7 @@ export class TimeInputStartEnd extends TimeInput {
     }
 }
 
-export class TimeInputBeats extends TimeInput {
+export class CycleTimeBeats extends CycleTimeEmitter {
     beats: number;
     bpm: number;
 
@@ -90,7 +90,32 @@ export class TimeInputBeats extends TimeInput {
     }
 }
 
-export abstract class TimeInputNotetime extends TimeInput {
+export class CycleTimeBeatFraction extends CycleTimeEmitter {
+  totalBeats = 1;
+  beatDivisor = 2;
+  bpm = 120;
+
+  set cycleCount(_: number) { /* do not allow */ }
+
+
+  get cycleCount() {
+    return this.totalBeats * this.beatDivisor;
+  }
+
+  get autocycle() { return true; }
+  get isConstantCycleTime() { return true; }
+
+  getDuration(cycleIndex: number): number {
+    const mspb = 60000 / this.bpm;
+    return mspb / this.beatDivisor;
+  }
+
+  constructor() {
+    super();
+  }
+}
+
+export abstract class CycleTimeNotetime extends CycleTimeEmitter {
     get autocycle() { return true; }
 
     noteTimes: number[];
@@ -121,7 +146,7 @@ export abstract class TimeInputNotetime extends TimeInput {
         return this._notes;
     }
 
-    cycleStartTime(cycle: number) : number {
+    cycleStartTime(cycle: number): number {
         return this.noteTimes[cycle] - this.noteTimes[0] + this.startTime;
     }
 
@@ -131,7 +156,7 @@ export abstract class TimeInputNotetime extends TimeInput {
     }
 }
 
-export class TimeInputNotetimeFixedDuration extends TimeInputNotetime {
+export class CycleTimeNotetimeFixedDuration extends CycleTimeNotetime {
     duration: number;
 
     get isConstantCycleTime() { return true; }
@@ -157,7 +182,7 @@ export class TimeInputNotetimeFixedDuration extends TimeInputNotetime {
     }
 }
 
-export class TimeInputNotetimeVariedDuration extends TimeInputNotetime {
+export class CycleTimeNoteToNote extends CycleTimeNotetime {
     get isConstantCycleTime() { return false; }
 
     constructor() {
@@ -178,10 +203,11 @@ export class TimeInputNotetimeVariedDuration extends TimeInputNotetime {
     }
 }
 
-export enum TimeInputType {
-    Duration,
-    StartEnd,
+export enum CycleEmissionType {
+    Span,
+    Delta,
     Beats,
-    NotetimeFixed,
-    NotetimeVaried
+    BeatDivision,
+    NotetimeSpan,
+    NoteToNote
 }

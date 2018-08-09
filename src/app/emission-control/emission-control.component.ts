@@ -104,7 +104,7 @@ export class EmissionControlComponent implements OnInit {
       const result = emitTargets(
         timeInput,
         divInput,
-        this.currentFunction,
+        this.useFixedBpm ? null : this.currentFunction,
         this.currentTimeFunction,
         timingDefault,
         this.bpm,

@@ -1,12 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {
-  TimeInput,
-  TimeInputNotetime,
-  TimeInputNotetimeFixedDuration,
-  TimeInputType,
-  TimeInputDuration,
-  TimeInputBeats
-} from '../time-input';
+  CycleTimeEmitter,
+  CycleTimeNotetime,
+  CycleTimeNotetimeFixedDuration,
+  CycleEmissionType,
+  CycleTimeMsDuration,
+  CycleTimeBeats
+} from '../../cycle-time-emitter';
 
 @Component({
   selector: 'app-timeinput-notetimes',
@@ -15,30 +15,30 @@ import {
 })
 export class TimeinputNotetimesComponent implements OnInit {
 
-  @Input() currentTimeInput: TimeInputNotetime;
+  @Input() currentTimeInput: CycleTimeNotetime;
 
-  @Input() innerTimeInput: TimeInput;
+  @Input() innerTimeInput: CycleTimeEmitter;
 
-  _innerTimeType: TimeInputType;
+  _innerTimeType: CycleEmissionType;
 
   get innerTimeType() {
     return this._innerTimeType;
   }
 
-  set innerTimeType(type: TimeInputType) {
+  set innerTimeType(type: CycleEmissionType) {
     if (!this.currentTimeInput) return;
 
     this._innerTimeType = type;
 
-    if (type == TimeInputType.Duration) {
-      let timeInput = new TimeInputDuration();
+    if (type == CycleEmissionType.Span) {
+      let timeInput = new CycleTimeMsDuration();
       this.innerTimeInput = new Proxy(timeInput, {
         set: (obj, prop, value) => {
           obj[prop] = value;
 
           if (prop == "duration") {
             if (this.isFixedDuration) {
-              var tiObj = this.currentTimeInput as TimeInputNotetimeFixedDuration;
+              var tiObj = this.currentTimeInput as CycleTimeNotetimeFixedDuration;
               tiObj.duration = obj.getDuration(0);
             }
           }
@@ -49,15 +49,15 @@ export class TimeinputNotetimesComponent implements OnInit {
     }
 
 
-    if (type == TimeInputType.Beats) {
-      let timeInput = new TimeInputBeats();
+    if (type == CycleEmissionType.Beats) {
+      let timeInput = new CycleTimeBeats();
       this.innerTimeInput = new Proxy(timeInput, {
         set: (obj, prop, value) => {
           obj[prop] = value;
 
           if (prop == "bpm" || prop == "beats") {
             if (this.isFixedDuration)
-              (this.currentTimeInput as TimeInputNotetimeFixedDuration)
+              (this.currentTimeInput as CycleTimeNotetimeFixedDuration)
                 .duration = obj.getDuration(0);
           }
 
@@ -67,11 +67,11 @@ export class TimeinputNotetimesComponent implements OnInit {
     } 
   }
 
-  TimeInputType = TimeInputType;
-  TimeInputNotetimeFixedDuration = TimeInputNotetimeFixedDuration;
+  TimeInputType = CycleEmissionType;
+  TimeInputNotetimeFixedDuration = CycleTimeNotetimeFixedDuration;
 
   get isFixedDuration() {
-    return this.currentTimeInput instanceof TimeInputNotetimeFixedDuration;
+    return this.currentTimeInput instanceof CycleTimeNotetimeFixedDuration;
   }
 
   constructor() { 
@@ -79,7 +79,7 @@ export class TimeinputNotetimesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.innerTimeType = TimeInputType.Duration;
+    this.innerTimeType = CycleEmissionType.Span;
   }
 
 }

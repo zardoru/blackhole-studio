@@ -17,11 +17,11 @@ import {
   MatCheckboxModule,
   MatToolbarModule
 } from '@angular/material';
-import { TimeinputDurationComponent } from './timeinput-duration/timeinput-duration.component';
+import { TimeinputDurationComponent } from './timeinput/timeinput-duration/timeinput-duration.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TimeinputBeatsComponent } from './timeinput-beats/timeinput-beats.component';
-import { TimeinputNotetimesComponent } from './timeinput-notetimes/timeinput-notetimes.component';
-import { TimeinputStartendComponent } from './timeinput-startend/timeinput-startend.component';
+import { TimeinputBeatsComponent } from './timeinput/timeinput-beats/timeinput-beats.component';
+import { TimeinputNotetimesComponent } from './timeinput/timeinput-notetimes/timeinput-notetimes.component';
+import { TimeinputStartendComponent } from './timeinput/timeinput-startend/timeinput-startend.component';
 import { DivisorinputComponent } from './divisorinput/divisorinput.component';
 import { EmissionControlComponent } from './emission-control/emission-control.component';
 import { FunctionEditorComponent } from './function-editor/function-editor.component';
@@ -34,6 +34,7 @@ import { SelectEmissionFunctionComponent } from './select-emission-function/sele
 import {
   EmissionFunctionParametersAssignmentComponent
 } from './emission-function-parameters-assignment/emission-function-parameters-assignment.component';
+import { TimeinputBeatfractionComponent } from './timeinput/timeinput-beatfraction/timeinput-beatfraction.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import {
     DeleteFunctionDialogComponent,
     TimingPointTemplateComponent,
     SelectEmissionFunctionComponent,
-    EmissionFunctionParametersAssignmentComponent
+    EmissionFunctionParametersAssignmentComponent,
+    TimeinputBeatfractionComponent
   ],
   imports: [
     BrowserModule,

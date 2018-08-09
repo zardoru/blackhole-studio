@@ -1,7 +1,7 @@
 <div *ngIf="isFixedDuration">
   <mat-form-field class="fullwidth">
     <mat-select [(ngModel)]="innerTimeType" placeholder="Cycle Time Type">
-      <mat-option [value]="TimeInputType.Duration">
+      <mat-option [value]="TimeInputType.Span">
         Duration (MS)
       </mat-option>
       <mat-option [value]="TimeInputType.Beats">
@@ -12,7 +12,7 @@
 
   <br>
 
-  <app-timeinput-duration [currentTimeInput]="innerTimeInput" *ngIf="innerTimeType == TimeInputType.Duration"></app-timeinput-duration>
+  <app-timeinput-duration [currentTimeInput]="innerTimeInput" *ngIf="innerTimeType == TimeInputType.Span"></app-timeinput-duration>
   <app-timeinput-beats [currentTimeInput]="innerTimeInput" *ngIf="innerTimeType == TimeInputType.Beats"></app-timeinput-beats>
 </div>
 
