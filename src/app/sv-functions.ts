@@ -2,8 +2,7 @@ import { builtinSv } from './builtin-sv-functions';
 
 export enum SvFunctionType {
   SV,
-  BPM,
-  TimingPoint
+  BPM
 }
 
 export class SvParameter {

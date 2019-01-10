@@ -1,100 +1,122 @@
-import { OsuTimingPoint } from './osu-timing-point';
-import {Cycle, DivisorEmitter, DivisorEmitterBeatFraction} from './divisor-emitter';
-import {CycleTimeEmitter, CycleTimeBeats} from './cycle-time-emitter';
+import {OsuTimingPoint} from './osu-timing-point';
+import {DivisorEmitter, DivisorEmitterBeatFraction, CycleDivision} from './divisor-emitter';
+import {CycleTimeEmitter, CycleTimeBeats, CycleOutput} from './cycle-time-emitter';
 import {SvFunction} from './sv-functions';
 
-type TimingList = OsuTimingPoint[];
+type TimingList = IterableIterator<OsuTimingPoint>;
 
 export class OsuTimingPointEmitter {
-    static emitFixedBpm(cycle: Cycle,
-                        defaultTimingPoint: OsuTimingPoint,
-                        bpm: number): TimingList {
-      const ret: TimingList = [];
+  static* emitFixedBpm(cycle: CycleOutput,
+                       defaultTimingPoint: OsuTimingPoint,
+                       bpm: number): TimingList {
 
-      defaultTimingPoint.inherited = false;
+    defaultTimingPoint.inherited = false;
 
-      for (const divisor of cycle) {
-        const point = defaultTimingPoint.applyDifference(
-          {
-            time: divisor.time,
-            value: 60000 / bpm,
-            inherited: false
-          });
-
-        ret.push(point);
+    const cl = cycle.cycle;
+    let it: IteratorResult<CycleDivision>;
+    while ((it = cl.next())) {
+      if (it.done) {
+        break;
       }
 
-      return ret;
-    }
-    static emitBpmFunction(vars: any,
-                           cycle: Cycle,
-                           defaultTimingPoint: OsuTimingPoint,
-                           bpmFunction: (number, any) => number): TimingList {
-      const ret: TimingList = [];
+      const divisor = it.value;
 
-      let i = 0;
-
-      vars.builtin.divisorCount = cycle.length;
-
-      for (const divisor of cycle) {
-        vars.builtin.currentDivisor = i;
-        i++;
-
-        const bpm = bpmFunction(divisor.fraction, vars);
-        if (isNaN(bpm)) { continue; }
-
-        const point = defaultTimingPoint.applyDifference({
+      const point = defaultTimingPoint.applyDifference(
+        {
           time: divisor.time,
           value: 60000 / bpm,
           inherited: false
         });
 
-        ret.push(point);
+      yield point;
+    }
+  }
 
+  static* emitBpmFunction(vars: any,
+                          cycle: CycleOutput,
+                          defaultTimingPoint: OsuTimingPoint,
+                          bpmFunction: (number, any) => number): TimingList {
+
+    let i = 0;
+
+    vars.builtin.divisorCount = cycle.count;
+
+    const cl = cycle.cycle;
+    let it: IteratorResult<CycleDivision>;
+    while ((it = cl.next())) {
+      if (it.done) {
+        break;
       }
 
-      return ret;
+      const divisor = it.value;
+      vars.builtin.currentDivisor = i;
+      i++;
+
+      const bpm = bpmFunction(divisor.fraction, vars);
+      if (isNaN(bpm)) {
+        continue;
+      }
+
+      const point = defaultTimingPoint.applyDifference({
+        time: divisor.time,
+        value: 60000 / bpm,
+        inherited: false
+      });
+
+      yield point;
+
     }
+  }
 
-    static emitSv(vars: any,
-           cycle: Cycle,
-           defaultTimingPoint: OsuTimingPoint,
-           svFunction: (number, any) => number): TimingList {
-        const ret: TimingList = [];
+  static* emitSv(vars: any,
+                 cycle: CycleOutput,
+                 defaultTimingPoint: OsuTimingPoint,
+                 svFunction: (number, any) => number): TimingList {
 
-        let i = 0;
-        let lastSv = NaN;
+    let i = 0;
+    let lastSv = NaN;
 
-        // set useful builtin stuff
-        vars.builtin.divisorCount = cycle.length;
+    // set useful builtin stuff
+    vars.builtin.divisorCount = cycle.count;
 
-        for (const divisor of cycle) {
-            // set builtin stuff that depends on the divisor index
-            vars.builtin.currentDivisor = i;
-            i++;
+    const cl = cycle.cycle;
+    let it: IteratorResult<CycleDivision>;
+    while ((it = cl.next())) {
+      if (it.done) {
+        break;
+      }
 
-            // call the sv function
-            const multiplier = svFunction && svFunction(divisor.fraction, vars) || divisor.fraction;
+      const divisor = it.value;
+      vars.builtin.currentDivisor = i;
+      i++;
 
-            // skip over NaNs (see reference)
-            if (isNaN(multiplier)) { continue; }
+      // apply sv function
+      let multiplier = 1;
+      if (svFunction != null) {
+        multiplier = svFunction(divisor.fraction, vars);
+      }
 
-            // apply the differences to the timing point
-            const point = defaultTimingPoint.applyDifference({
-                    time: divisor.time,
-                    value: -100 / multiplier,
-                    inherited: true
-                });
+      // skip intentional NaNs
+      if (isNaN(multiplier) || multiplier == null) {
+        continue;
+      }
 
-            // don't repeat SV values! if it doesn't repeat, push it.
-            if (multiplier !== lastSv) {
-                lastSv = multiplier;
-                ret.push(point);
-            } // else console.log("skipping value = " + lastSv, " fraction " + divisor.fraction);
-        }
+      // create a timing point
+      const point = defaultTimingPoint.applyDifference({
+        time: divisor.time,
+        value: -100 / multiplier,
+        inherited: true
+      });
 
-        return ret;
+      // yield if it's valid
+      if (multiplier !== lastSv) {
+        lastSv = multiplier;
+        yield point;
+      }
+
+      // else console.log("skipping value = " + lastSv, " fraction " + divisor.fraction);
     }
+  }
 }
 
 
@@ -106,7 +128,7 @@ export function emitTargets(
   defaultTimingPoint: OsuTimingPoint,
   fixedBpm: number,
   includeDivisorAtEnd: boolean): string[] {
-  let output: string[] = [];
+  const output: string[] = [];
   const cycleCount = timeInput.cycleCount;
 
   function generateStaticBuiltinVariables(currentCycle: number) {
@@ -125,8 +147,8 @@ export function emitTargets(
     builtin.currentCycle = currentCycle;
     builtin.cycleCount = cycleCount;
 
-    // builtin.spanPerCycle = timeInput.cycleDuration;
-    // builtin.spanPerDivision = divisors.
+    builtin.cycleSpan = timeInput.cycleDuration;
+    builtin.divisionSpan = timeInput.cycleDuration / divisors.getSpanDivisorCount(timeInput.cycleDuration);
 
     return builtin;
   }
@@ -143,11 +165,11 @@ export function emitTargets(
     varsTime.builtin = builtin;
 
     const cycleData = timeInput.createCycle(
-      i, 
-      divisors, 
-      userFunctionTime, 
+      i,
+      divisors,
+      userFunctionTime,
       varsTime,
-      includeDivisorAtEnd && (i == (cycleCount - 1))
+      includeDivisorAtEnd && (i === (cycleCount - 1))
     );
 
     let cycleResult: TimingList;
@@ -155,25 +177,29 @@ export function emitTargets(
     if (svFunction) {
       if (svFunction.isBpm) {
         cycleResult = OsuTimingPointEmitter.emitBpmFunction(
-                            varsSv,
-                            cycleData,
-                            defaultTimingPoint,
-                            userFunctionSV);
+          varsSv,
+          cycleData,
+          defaultTimingPoint,
+          userFunctionSV);
       } else {
         cycleResult = OsuTimingPointEmitter.emitSv(
-                            varsSv,
-                            cycleData,
-                            defaultTimingPoint,
-                            userFunctionSV);
+          varsSv,
+          cycleData,
+          defaultTimingPoint,
+          userFunctionSV);
       }
     } else {
       cycleResult = OsuTimingPointEmitter.emitFixedBpm(
-                            cycleData,
-                            defaultTimingPoint,
-                            fixedBpm);
+        cycleData,
+        defaultTimingPoint,
+        fixedBpm);
     }
 
-    output = output.concat(cycleResult.map(x => x.toString()));
+    let res = cycleResult.next();
+    while (!res.done) {
+      output.push(res.value.toString());
+      res = cycleResult.next();
+    }
   }
 
   return output;
