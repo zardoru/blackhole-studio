@@ -1,7 +1,7 @@
 import {OsuTimingPoint} from './osu-timing-point';
 import {DivisorEmitter, DivisorEmitterBeatFraction, CycleDivision} from './divisor-emitter';
 import {CycleTimeEmitter, CycleTimeBeats, CycleOutput} from './cycle-time-emitter';
-import {SvFunction} from './sv-functions';
+import {SvFunction, SvFunctionType} from './sv-functions';
 
 type TimingList = IterableIterator<OsuTimingPoint>;
 
@@ -175,7 +175,7 @@ export function emitTargets(
     let cycleResult: TimingList;
 
     if (svFunction) {
-      if (svFunction.isBpm) {
+      if (svFunction.type === SvFunctionType.BPM) {
         cycleResult = OsuTimingPointEmitter.emitBpmFunction(
           varsSv,
           cycleData,
