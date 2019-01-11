@@ -1485,7 +1485,7 @@ function emitTargets(timeInput, divisors, svFunction, timeFunction, defaultTimin
         var cycleData = timeInput.createCycle(i, divisors, userFunctionTime, varsTime, includeDivisorAtEnd && (i === (cycleCount - 1)));
         var cycleResult = void 0;
         if (svFunction) {
-            if (svFunction.isBpm) {
+            if (svFunction.type === _sv_functions__WEBPACK_IMPORTED_MODULE_3__["SvFunctionType"].BPM) {
                 cycleResult = OsuTimingPointEmitter.emitBpmFunction(varsSv, cycleData, defaultTimingPoint, userFunctionSV);
             }
             else {
