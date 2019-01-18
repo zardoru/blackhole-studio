@@ -35,6 +35,8 @@ import {
   EmissionFunctionParametersAssignmentComponent
 } from './emission-function-parameters-assignment/emission-function-parameters-assignment.component';
 import { TimeinputBeatfractionComponent } from './timeinput/timeinput-beatfraction/timeinput-beatfraction.component';
+import { ComposeEmittersComponent } from './compose-emitters/compose-emitters.component';
+import { ComposeTimingPointsComponent } from './compose-timing-points/compose-timing-points.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { TimeinputBeatfractionComponent } from './timeinput/timeinput-beatfracti
     TimingPointTemplateComponent,
     SelectEmissionFunctionComponent,
     EmissionFunctionParametersAssignmentComponent,
-    TimeinputBeatfractionComponent
+    TimeinputBeatfractionComponent,
+    ComposeEmittersComponent,
+    ComposeTimingPointsComponent
   ],
   imports: [
     BrowserModule,

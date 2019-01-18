@@ -96,9 +96,9 @@ export class EmissionControlComponent implements OnInit {
     const divInput = this.divisorInput.currentDivisorInput;
     const timingDefault = this.timingPointTemplate.currentTimingPoint;
 
-    //console.log(timeInput);
-    //console.log(divInput);
-    //console.log(timingDefault);
+    // console.log(timeInput);
+    // console.log(divInput);
+    // console.log(timingDefault);
 
     try {
       const result = emitTargets(
