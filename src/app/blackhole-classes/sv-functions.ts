@@ -65,7 +65,17 @@ export class SvFunction {
     static getCurrentParameters(it: any): any {
       const ret: any = {};
       for (const param of it.parameters) {
-        ret[param.name] = param.currentValue || param.defaultValue;
+        if (param.currentValue) {
+          ret[param.name] = param.currentValue;
+        } else {
+          const val = parseFloat(param.defaultValue);
+          if (isNaN(val)) {
+            ret[param.name] = param.defaultValue;
+          }
+          else {
+            ret[param.name] = val;
+          }
+        }
       }
 
       return ret;

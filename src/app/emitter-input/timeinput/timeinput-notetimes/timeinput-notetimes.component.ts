@@ -6,7 +6,7 @@ import {
   CycleEmissionType,
   CycleTimeMsDuration,
   CycleTimeBeats
-} from '../../cycle-time-emitter';
+} from '../../../blackhole-classes/cycle-time-emitter';
 
 @Component({
   selector: 'app-timeinput-notetimes',

@@ -127,8 +127,8 @@ export function emitTargets(
   timeFunction: SvFunction,
   defaultTimingPoint: OsuTimingPoint,
   fixedBpm: number,
-  includeDivisorAtEnd: boolean): string[] {
-  const output: string[] = [];
+  includeDivisorAtEnd: boolean): OsuTimingPoint[] {
+  const output: OsuTimingPoint[] = [];
   const cycleCount = timeInput.cycleCount;
 
   function generateStaticBuiltinVariables(currentCycle: number) {
@@ -197,7 +197,7 @@ export function emitTargets(
 
     let res = cycleResult.next();
     while (!res.done) {
-      output.push(res.value.toString());
+      output.push(res.value);
       res = cycleResult.next();
     }
   }

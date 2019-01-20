@@ -29,57 +29,10 @@
     <div class="col-md-3">
       <mat-card>
         <mat-card-title>Emission control</mat-card-title>
-        <mat-checkbox [(ngModel)]="useFixedBpm">Use Fixed BPM</mat-checkbox>
-        <hr>
-        <!-- Function section -->
-        <div *ngIf="!useFixedBpm">
-          <div class="row">
-            <h4>SV/BPM function</h4>
-            <div class="col-md-12 text-center" [class.grey]="!currentFunction">
-              {{ currentFunction && currentFunction.name || "no function selected" }}
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 text-center">
-              <button mat-raised-button (click)="selectFunction(false)">Select function</button>
-            </div>
-            <div class="col-md-4 text-center">
-              <button mat-raised-button (click)="setParameters(false)" [disabled]="!currentFunction">
-                Set Parameters
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Fixed BPM section -->
-        <div *ngIf="useFixedBpm">
-          <input matInput type="number" placeholder="BPM" [(ngModel)]="bpm">
-        </div>
-        <hr>
-
-        <!-- Time deformation -->
-        <div class="row">
-          <h4>Time Deformation function</h4>
-          <div class="col-md-12 text-center" [class.grey]="!currentTimeFunction">
-            {{ currentTimeFunction && currentTimeFunction.name || "no function selected" }}
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6 text-center">
-            <button mat-raised-button (click)="selectFunction(true)">Select function</button>
-          </div>
-          <div class="col-md-4 text-center">
-            <button mat-raised-button (click)="setParameters(true)" [disabled]="!currentTimeFunction">
-              Set Parameters
-            </button>
-          </div>
-        </div>
-
-        <hr>
+        <app-select-emitter-function></app-select-emitter-function>
 
         <!-- Emit section -->
-        <button mat-raised-button [disabled]="!(currentFunction || useFixedBpm)" (click)="emit()">
+        <button mat-raised-button [disabled]="!(funcParams.currentFunction || funcParams.useFixedBpm)" (click)="emit()">
           Emit
         </button>
       </mat-card>

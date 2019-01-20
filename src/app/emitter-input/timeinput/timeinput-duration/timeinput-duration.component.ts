@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CycleTimeMsDuration } from '../../cycle-time-emitter';
+import { CycleTimeMsDuration } from '../../../blackhole-classes/cycle-time-emitter';
 
 @Component({
   selector: 'app-timeinput-duration',

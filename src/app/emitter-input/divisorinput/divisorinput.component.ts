@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DivisorEmitter, DivisorEmitterByCount, DivisorEmitterBeatFraction, DivisorInputType, DivisorEmitterTimeSpan } from '../divisor-emitter';
+import { DivisorEmitter, DivisorEmitterByCount, DivisorEmitterBeatFraction, DivisorInputType, DivisorEmitterTimeSpan } from '../../blackhole-classes/divisor-emitter';
 
 @Component({
   selector: 'app-divisorinput',

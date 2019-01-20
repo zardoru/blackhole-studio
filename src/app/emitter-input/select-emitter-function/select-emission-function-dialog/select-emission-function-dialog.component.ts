@@ -1,13 +1,18 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {SvFunction, SvFunctionCollection, SvFunctionType} from '../sv-functions';
+import {SvFunction, SvFunctionCollection, SvFunctionType} from '../../../blackhole-classes/sv-functions';
 
+
+/*
+Refresher: this is the dropdown that is in select-emitter-function.
+Should be used only internally, in select-emitter-function.
+*/
 @Component({
-  selector: 'app-select-emission-function',
-  templateUrl: './select-emission-function.component.html',
-  styleUrls: ['./select-emission-function.component.css']
+  selector: 'app-select-emission-function-dialog',
+  templateUrl: './select-emission-function-dialog.component.html',
+  styleUrls: ['./select-emission-function-dialog.component.css']
 })
-export class SelectEmissionFunctionComponent implements OnInit {
+export class SelectEmissionFunctionDialogComponent implements OnInit {
 
   collection: SvFunction[];
 
@@ -16,7 +21,7 @@ export class SelectEmissionFunctionComponent implements OnInit {
   selectedFunction: SvFunction;
 
   constructor(
-    public dialogRef: MatDialogRef<SelectEmissionFunctionComponent>,
+    public dialogRef: MatDialogRef<SelectEmissionFunctionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
     this.collection = [];
@@ -28,7 +33,7 @@ export class SelectEmissionFunctionComponent implements OnInit {
 
     const funcCollection = SvFunctionCollection.getCollection();
     // console.log(funcCollection);
-    for (var key in funcCollection) {
+    for (const key in funcCollection) {
       const func = funcCollection[key];
       const isSvFunction = func.type === undefined || func.type === SvFunctionType.SV;
 

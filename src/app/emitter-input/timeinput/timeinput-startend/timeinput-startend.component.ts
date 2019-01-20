@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CycleTimeDeltatime } from '../../cycle-time-emitter';
-import { validateTimestamp } from '../../osu-timestamp';
+import { CycleTimeDeltatime } from '../../../blackhole-classes/cycle-time-emitter';
+import { validateTimestamp } from '../../../blackhole-classes/osu-timestamp';
 
 @Component({
   selector: 'app-timeinput-startend',

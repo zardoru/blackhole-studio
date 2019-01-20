@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CycleEmissionType } from "./cycle-time-emitter";
-import { SvFunctionCollection } from './sv-functions';
+import { CycleEmissionType } from "./blackhole-classes/cycle-time-emitter";
+import { SvFunctionCollection } from './blackhole-classes/sv-functions';
 
 @Component({
   selector: 'app-root',

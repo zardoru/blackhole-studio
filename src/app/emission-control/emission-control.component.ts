@@ -1,12 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {TimeinputComponent} from '../timeinput/timeinput.component';
-import {DivisorinputComponent} from '../divisorinput/divisorinput.component';
-import {SvFunction, SvFunctionType} from '../sv-functions';
-import {TimingPointTemplateComponent} from '../timing-point-template/timing-point-template.component';
-import {MatDialog} from '@angular/material';
-import {emitTargets} from '../osu-timing-point-emitter';
-import {SelectEmissionFunctionComponent} from '../select-emission-function/select-emission-function.component';
-import {EmissionFunctionParametersAssignmentComponent} from '../emission-function-parameters-assignment/emission-function-parameters-assignment.component';
+import {TimeinputComponent} from '../emitter-input/timeinput/timeinput.component';
+import {DivisorinputComponent} from '../emitter-input/divisorinput/divisorinput.component';
+import {TimingPointTemplateComponent} from '../emitter-input/timeinput/timing-point-template/timing-point-template.component';
+import {emitTargets} from '../blackhole-classes/osu-timing-point-emitter';
+import {SelectEmitterFunctionComponent} from '../emitter-input/select-emitter-function/select-emitter-function.component';
 
 @Component({
   selector: 'app-emission-control',
@@ -23,10 +20,8 @@ export class EmissionControlComponent implements OnInit {
   @ViewChild(TimingPointTemplateComponent)
   timingPointTemplate: TimingPointTemplateComponent;
 
-  useFixedBpm: boolean;
-  bpm: number;
-  currentFunction: SvFunction;
-  currentTimeFunction: SvFunction;
+  @ViewChild(SelectEmitterFunctionComponent)
+  funcParams: SelectEmitterFunctionComponent;
 
   output: string;
 
@@ -34,62 +29,12 @@ export class EmissionControlComponent implements OnInit {
 
   includeDivisorAtEnd: boolean;
 
-  constructor(public dialog: MatDialog) {
-    this.bpm = 120;
+  constructor() {
     this.error = null;
     this.output = '';
     // this.output = "hello world";
   }
 
-  selectFunction(isForTimeDeformation: boolean) {
-    if (isForTimeDeformation) {
-      const funcDialog = this.dialog.open(SelectEmissionFunctionComponent, {
-        data: {
-          allowedFunctionTypes: [SvFunctionType.SV]
-        }
-      });
-
-      funcDialog.afterClosed().subscribe((x) => {
-        this.currentTimeFunction = x;
-      });
-
-    } else {
-      const funcDialog = this.dialog.open(SelectEmissionFunctionComponent, {
-        data: {
-          allowedFunctionTypes: [SvFunctionType.SV, SvFunctionType.BPM]
-        }
-      });
-
-      funcDialog.afterClosed().subscribe((x) => {
-        this.currentFunction = x;
-      });
-    }
-  }
-
-  setParameters(isForTimeDeformation: boolean) {
-
-    if (isForTimeDeformation) {
-
-      this.dialog.open(EmissionFunctionParametersAssignmentComponent, {
-        height: "400px",
-        width: "800px",
-        data: {
-          target: this.currentTimeFunction
-        }
-      });
-
-    } else {
-
-      this.dialog.open(EmissionFunctionParametersAssignmentComponent, {
-        height: "400px",
-        width: "800px",
-        data: {
-          target: this.currentFunction
-        }
-      });
-
-    }
-  }
 
   emit() {
     const timeInput = this.timeInput.currentTimeInput;
@@ -104,12 +49,16 @@ export class EmissionControlComponent implements OnInit {
       const result = emitTargets(
         timeInput,
         divInput,
-        this.useFixedBpm ? null : this.currentFunction,
-        this.currentTimeFunction,
+        /*
+        todo: wrap this extra funcParams data into
+        its own type that doesn't depend on the component
+        */
+        this.funcParams.useFixedBpm ? null : this.funcParams.currentFunction,
+        this.funcParams.currentTimeFunction,
         timingDefault,
-        this.bpm,
+        this.funcParams.bpm,
         this.includeDivisorAtEnd
-      );
+      ).map(x => x.toString());
 
       this.output = result.join('\n');
       this.error = null;
@@ -120,17 +69,17 @@ export class EmissionControlComponent implements OnInit {
     }
   }
 
-  get currentDivisors() {
-    var di = this.divisorInput.currentDivisorInput;
-    var ti = this.timeInput.currentTimeInput;
-    var arr = new Set();
-    for (var i = 0; i < ti.cycleCount; i++) {
+  /*get currentDivisors() {
+    const di = this.divisorInput.currentDivisorInput;
+    const ti = this.timeInput.currentTimeInput;
+    const arr = new Set();
+    for (let i = 0; i < ti.cycleCount; i++) {
       arr.add(Math.floor(di.getSpanDivisorCount(ti.getDuration(i))));
     }
 
-    return Array.from(arr).join(", ");
+    return Array.from(arr).join(', ');
   }
-
+*/
   ngOnInit() {
   }
 

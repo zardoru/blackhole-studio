@@ -7,8 +7,8 @@ import {
   CycleTimeNotetimeFixedDuration,
   CycleTimeNoteToNote,
   CycleEmissionType, CycleTimeBeatFraction
-} from '../cycle-time-emitter';
-import { validateTimestamp } from '../osu-timestamp';
+} from '../../blackhole-classes/cycle-time-emitter';
+import { validateTimestamp } from '../../blackhole-classes/osu-timestamp';
 
 
 

@@ -1,6 +1,6 @@
-///<reference path="../osu-timing-point.ts"/>
+///<reference path="../../../blackhole-classes/osu-timing-point.ts"/>
 import { Component, OnInit } from '@angular/core';
-import {OsuTimingPoint, SampleSet} from '../osu-timing-point';
+import {OsuTimingPoint, SampleSet} from '../../../blackhole-classes/osu-timing-point';
 
 @Component({
   selector: 'app-timing-point-template',

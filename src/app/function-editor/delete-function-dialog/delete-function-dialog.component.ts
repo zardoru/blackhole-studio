@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SvFunctionCollection } from '../sv-functions';
+import { SvFunctionCollection } from '../../blackhole-classes/sv-functions';
 import { MatDialogRef } from '@angular/material';
 
 @Component({

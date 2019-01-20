@@ -1,8 +1,8 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {SvFunction, SvFunctionCollection, SvFunctionType, SvParameter} from '../sv-functions';
+import {SvFunction, SvFunctionCollection, SvFunctionType, SvParameter} from '../blackhole-classes/sv-functions';
 import {MatDialog} from '@angular/material';
-import {SelectFunctionDialogComponent} from '../select-function-dialog/select-function-dialog.component';
-import {DeleteFunctionDialogComponent} from '../delete-function-dialog/delete-function-dialog.component';
+import {SelectFunctionDialogComponent} from './select-function-dialog/select-function-dialog.component';
+import {DeleteFunctionDialogComponent} from './delete-function-dialog/delete-function-dialog.component';
 import { saveAs } from 'file-saver/FileSaver.js';
 
 @Component({

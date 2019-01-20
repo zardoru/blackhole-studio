@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CycleTimeBeats } from '../../cycle-time-emitter';
+import { CycleTimeBeats } from '../../../blackhole-classes/cycle-time-emitter';
 
 @Component({
   selector: 'app-timeinput-beats',

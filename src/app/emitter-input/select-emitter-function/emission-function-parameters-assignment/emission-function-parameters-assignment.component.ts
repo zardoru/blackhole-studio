@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material';
-import {SvFunction} from '../sv-functions';
+import {SvFunction} from '../../../blackhole-classes/sv-functions';
 
 @Component({
   selector: 'app-emission-function-parameters-assignment',
