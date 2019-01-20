@@ -1,0 +1,25 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{functitle}} Emitter</mat-panel-title>
+  <mat-panel-description>
+    Time: {{timeInput.currentTimeInput.startTime}}
+    Effect: {{functitle}}
+  </mat-panel-description>
+  </mat-expansion-panel-header>
+  <div class="row">
+    <div class="col-md-4">
+      <app-timeinput></app-timeinput>
+    </div>
+    <div class="col-md-4">
+      <app-divisorinput></app-divisorinput>
+    </div>
+    <div class="col-md-4">
+      <app-select-emitter-function></app-select-emitter-function>
+    </div>
+  </div>
+
+  <mat-action-row>
+    <button mat-raised-button (click)="removeSelf()">Remove</button>
+  </mat-action-row>
+</mat-expansion-panel>
+
