@@ -152,7 +152,8 @@ export function composeTimingPoints(set1: OsuTimingPoint[],
     if (s2Cur.time <= tp.time) {
       const ntp = template.applyDifference({
         time: tp.time,
-        value: -100 / (s2Cur.svMultiplier * tp.svMultiplier)
+        value: -100 / (s2Cur.svMultiplier * tp.svMultiplier),
+        inherited: true
       });
 
       ret.push(ntp);
@@ -162,7 +163,8 @@ export function composeTimingPoints(set1: OsuTimingPoint[],
     if (s2Cur.time > tp.time) {
       const ntp = template.applyDifference({
         time: tp.time,
-        value: -100 / (tp.svMultiplier)
+        value: -100 / (tp.svMultiplier),
+        inherited: true
       });
 
       ret.push(ntp);
@@ -180,7 +182,8 @@ export function composeTimingPoints(set1: OsuTimingPoint[],
       if (s1Cur.time > tp.time) {
         const ntp = template.applyDifference(({
           time: tp.time,
-          value: -100 / (tp.svMultiplier)
+          value: -100 / (tp.svMultiplier),
+          inherited: true
         }));
 
         ret.push(ntp);
@@ -190,7 +193,8 @@ export function composeTimingPoints(set1: OsuTimingPoint[],
       if (s1Cur.time < tp.time) {
         const ntp = template.applyDifference(({
           time: tp.time,
-          value: -100 / (s1Cur.svMultiplier * tp.svMultiplier)
+          value: -100 / (s1Cur.svMultiplier * tp.svMultiplier),
+          inherited: true
         }));
 
         ret.push(ntp);
