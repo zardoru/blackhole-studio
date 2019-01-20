@@ -1141,7 +1141,8 @@ function composeTimingPoints(set1, set2, template) {
         if (s2Cur.time <= tp.time) {
             var ntp = template.applyDifference({
                 time: tp.time,
-                value: -100 / (s2Cur.svMultiplier * tp.svMultiplier)
+                value: -100 / (s2Cur.svMultiplier * tp.svMultiplier),
+                inherited: true
             });
             ret.push(ntp);
         }
@@ -1149,7 +1150,8 @@ function composeTimingPoints(set1, set2, template) {
         if (s2Cur.time > tp.time) {
             var ntp = template.applyDifference({
                 time: tp.time,
-                value: -100 / (tp.svMultiplier)
+                value: -100 / (tp.svMultiplier),
+                inherited: true
             });
             ret.push(ntp);
         }
@@ -1164,7 +1166,8 @@ function composeTimingPoints(set1, set2, template) {
             if (s1Cur.time > tp.time) {
                 var ntp = template.applyDifference(({
                     time: tp.time,
-                    value: -100 / (tp.svMultiplier)
+                    value: -100 / (tp.svMultiplier),
+                    inherited: true
                 }));
                 ret.push(ntp);
             }
@@ -1172,7 +1175,8 @@ function composeTimingPoints(set1, set2, template) {
             if (s1Cur.time < tp.time) {
                 var ntp = template.applyDifference(({
                     time: tp.time,
-                    value: -100 / (s1Cur.svMultiplier * tp.svMultiplier)
+                    value: -100 / (s1Cur.svMultiplier * tp.svMultiplier),
+                    inherited: true
                 }));
                 ret.push(ntp);
             }
@@ -1296,7 +1300,7 @@ module.exports = "textarea {\r\n  min-height: 300px;\r\n}\r\n\r\n/*# sourceMappi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<br>\n\n<div class=\"col\">\n\n  <h1>Compose Emitters</h1>\n\n  <div class=\"padder\">\n    <mat-card>\n      <mat-card-title>\n        Emitters\n      </mat-card-title>\n      <mat-card-actions>\n        <button mat-raised-button (click)=\"addEmitter()\">Add Emitter</button>\n      </mat-card-actions>\n      <mat-card-content>\n        <ng-template #container>\n        </ng-template>\n      </mat-card-content>\n    </mat-card>\n  </div>\n\n  <hr>\n\n  <div class=\"padder\">\n    <mat-card>\n      <mat-card-title>\n        Timing point parameters and combined output\n      </mat-card-title>\n\n      <mat-card-content>\n          <div class=\"row\">\n            <div class=\"col-md-4\">\n              <app-timing-point-template></app-timing-point-template>\n            </div>\n            <div class=\"col-md-8\">\n              <textarea matInput placeholder=\"output will be here\" [(ngModel)]=\"output\"></textarea>\n            </div>\n          </div>\n      </mat-card-content>\n\n      <mat-card-actions>\n        <button mat-raised-button (click)=\"emit()\">Emit</button>\n      </mat-card-actions>\n    </mat-card>\n  </div>\n\n</div>\n"
+module.exports = "<br>\r\n\r\n<div class=\"col\">\r\n\r\n  <h1>Compose Emitters</h1>\r\n\r\n  <div class=\"padder\">\r\n    <mat-card>\r\n      <mat-card-title>\r\n        Emitters\r\n      </mat-card-title>\r\n      <mat-card-actions>\r\n        <button mat-raised-button (click)=\"addEmitter()\">Add Emitter</button>\r\n      </mat-card-actions>\r\n      <mat-card-content>\r\n        <ng-template #container>\r\n        </ng-template>\r\n      </mat-card-content>\r\n    </mat-card>\r\n  </div>\r\n\r\n  <hr>\r\n\r\n  <div class=\"padder\">\r\n    <mat-card>\r\n      <mat-card-title>\r\n        Timing point parameters and combined output\r\n      </mat-card-title>\r\n\r\n      <mat-card-content>\r\n          <div class=\"row\">\r\n            <div class=\"col-md-4\">\r\n              <app-timing-point-template></app-timing-point-template>\r\n            </div>\r\n            <div class=\"col-md-8\">\r\n              <textarea matInput placeholder=\"output will be here\" [(ngModel)]=\"output\"></textarea>\r\n            </div>\r\n          </div>\r\n      </mat-card-content>\r\n\r\n      <mat-card-actions>\r\n        <button mat-raised-button (click)=\"emit()\">Emit</button>\r\n      </mat-card-actions>\r\n    </mat-card>\r\n  </div>\r\n\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1398,7 +1402,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-expansion-panel>\n  <mat-expansion-panel-header>\n    <mat-panel-title>{{functitle}} Emitter</mat-panel-title>\n  <mat-panel-description>\n    Time: {{timeInput.currentTimeInput.startTime}}\n    Effect: {{functitle}}\n  </mat-panel-description>\n  </mat-expansion-panel-header>\n  <div class=\"row\">\n    <div class=\"col-md-4\">\n      <app-timeinput></app-timeinput>\n    </div>\n    <div class=\"col-md-4\">\n      <app-divisorinput></app-divisorinput>\n    </div>\n    <div class=\"col-md-4\">\n      <app-select-emitter-function></app-select-emitter-function>\n    </div>\n  </div>\n\n  <mat-action-row>\n    <button mat-raised-button (click)=\"removeSelf()\">Remove</button>\n  </mat-action-row>\n</mat-expansion-panel>\n\n"
+module.exports = "<mat-expansion-panel>\r\n  <mat-expansion-panel-header>\r\n    <mat-panel-title>{{functitle}} Emitter</mat-panel-title>\r\n  <mat-panel-description>\r\n    Time: {{timeInput.currentTimeInput.startTime}}\r\n    Effect: {{functitle}}\r\n  </mat-panel-description>\r\n  </mat-expansion-panel-header>\r\n  <div class=\"row\">\r\n    <div class=\"col-md-4\">\r\n      <app-timeinput></app-timeinput>\r\n    </div>\r\n    <div class=\"col-md-4\">\r\n      <app-divisorinput></app-divisorinput>\r\n    </div>\r\n    <div class=\"col-md-4\">\r\n      <app-select-emitter-function></app-select-emitter-function>\r\n    </div>\r\n  </div>\r\n\r\n  <mat-action-row>\r\n    <button mat-raised-button (click)=\"removeSelf()\">Remove</button>\r\n  </mat-action-row>\r\n</mat-expansion-panel>\r\n\r\n"
 
 /***/ }),
 
@@ -1503,7 +1507,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<br>\n<div class=\"col\">\n<mat-card>\n  <mat-card-title>Compose timing points</mat-card-title>\n  <div class=\"row\">\n    <div class=\"col-md-6\">\n      <textarea matInput placeholder=\"first timing point set\" [(ngModel)]=\"set1lines\"></textarea>\n    </div>\n    <div class=\"col-md-6\">\n      <textarea matInput placeholder=\"second timing point set\" [(ngModel)]=\"set2lines\"></textarea>\n    </div>\n  </div>\n  <button mat-raised-button (click)=\"compose()\">Compose</button>\n</mat-card>\n\n<mat-card>\n  <textarea matInput readonly placeholder=\"output will be here\" [(ngModel)]=\"output\"></textarea>\n</mat-card>\n</div>\n\n"
+module.exports = "<br>\r\n<div class=\"col\">\r\n<mat-card>\r\n  <mat-card-title>Compose timing points</mat-card-title>\r\n  <div class=\"row\">\r\n    <div class=\"col-md-6\">\r\n      <textarea matInput placeholder=\"first timing point set\" [(ngModel)]=\"set1lines\"></textarea>\r\n    </div>\r\n    <div class=\"col-md-6\">\r\n      <textarea matInput placeholder=\"second timing point set\" [(ngModel)]=\"set2lines\"></textarea>\r\n    </div>\r\n  </div>\r\n  <button mat-raised-button (click)=\"compose()\">Compose</button>\r\n</mat-card>\r\n\r\n<mat-card>\r\n  <textarea matInput readonly placeholder=\"output will be here\" [(ngModel)]=\"output\"></textarea>\r\n</mat-card>\r\n</div>\r\n\r\n"
 
 /***/ }),
 
@@ -1911,7 +1915,7 @@ module.exports = ".grey {\r\n  color: red;\r\n}\r\n\r\n/*# sourceMappingURL=data
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-checkbox [(ngModel)]=\"useFixedBpm\">Use Fixed BPM</mat-checkbox>\n<hr>\n<!-- Function section -->\n<div *ngIf=\"!useFixedBpm\">\n  <div class=\"row\">\n    <h4>SV/BPM function</h4>\n    <div class=\"col-md-12 text-center\" [class.grey]=\"!currentFunction\">\n      {{ currentFunction && currentFunction.name || \"no function selected\" }}\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-md-6 text-center\">\n      <button mat-raised-button (click)=\"selectFunction(false)\">Select function</button>\n    </div>\n    <div class=\"col-md-4 text-center\">\n      <button mat-raised-button (click)=\"setParameters(false)\" [disabled]=\"!currentFunction\">\n        Set Parameters\n      </button>\n    </div>\n  </div>\n</div>\n\n<!-- Fixed BPM section -->\n<div *ngIf=\"useFixedBpm\">\n  <input matInput type=\"number\" placeholder=\"BPM\" [(ngModel)]=\"bpm\">\n</div>\n\n<hr>\n\n<!-- Time deformation -->\n<div class=\"row\">\n  <h4>Time Deformation function</h4>\n  <div class=\"col-md-12 text-center\" [class.grey]=\"!currentTimeFunction\">\n    {{ currentTimeFunction && currentTimeFunction.name || \"no function selected\" }}\n  </div>\n</div>\n\n<div class=\"row\">\n  <div class=\"col-md-6 text-center\">\n    <button mat-raised-button (click)=\"selectFunction(true)\">Select function</button>\n  </div>\n  <div class=\"col-md-4 text-center\">\n    <button mat-raised-button (click)=\"setParameters(true)\" [disabled]=\"!currentTimeFunction\">\n      Set Parameters\n    </button>\n  </div>\n</div>\n\n<hr>\n"
+module.exports = "<mat-checkbox [(ngModel)]=\"useFixedBpm\">Use Fixed BPM</mat-checkbox>\r\n<hr>\r\n<!-- Function section -->\r\n<div *ngIf=\"!useFixedBpm\">\r\n  <div class=\"row\">\r\n    <h4>SV/BPM function</h4>\r\n    <div class=\"col-md-12 text-center\" [class.grey]=\"!currentFunction\">\r\n      {{ currentFunction && currentFunction.name || \"no function selected\" }}\r\n    </div>\r\n  </div>\r\n  <div class=\"row\">\r\n    <div class=\"col-md-6 text-center\">\r\n      <button mat-raised-button (click)=\"selectFunction(false)\">Select function</button>\r\n    </div>\r\n    <div class=\"col-md-4 text-center\">\r\n      <button mat-raised-button (click)=\"setParameters(false)\" [disabled]=\"!currentFunction\">\r\n        Set Parameters\r\n      </button>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<!-- Fixed BPM section -->\r\n<div *ngIf=\"useFixedBpm\">\r\n  <input matInput type=\"number\" placeholder=\"BPM\" [(ngModel)]=\"bpm\">\r\n</div>\r\n\r\n<hr>\r\n\r\n<!-- Time deformation -->\r\n<div class=\"row\">\r\n  <h4>Time Deformation function</h4>\r\n  <div class=\"col-md-12 text-center\" [class.grey]=\"!currentTimeFunction\">\r\n    {{ currentTimeFunction && currentTimeFunction.name || \"no function selected\" }}\r\n  </div>\r\n</div>\r\n\r\n<div class=\"row\">\r\n  <div class=\"col-md-6 text-center\">\r\n    <button mat-raised-button (click)=\"selectFunction(true)\">Select function</button>\r\n  </div>\r\n  <div class=\"col-md-4 text-center\">\r\n    <button mat-raised-button (click)=\"setParameters(true)\" [disabled]=\"!currentTimeFunction\">\r\n      Set Parameters\r\n    </button>\r\n  </div>\r\n</div>\r\n\r\n<hr>\r\n"
 
 /***/ }),
 
