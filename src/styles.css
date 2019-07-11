@@ -23,3 +23,11 @@ html {
 .fullwidth {
     width: 100%;
 }
+
+.grow {
+  flex: 1 1 auto;
+}
+
+.grey {
+  color: red;
+}

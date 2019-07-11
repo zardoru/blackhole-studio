@@ -15,7 +15,7 @@
           <strong>Total divisors: </strong> <br>
           {{ currentDivisors }}
         </div> -->
-        <mat-checkbox [(ngModel)]="includeDivisorAtEnd"> Include divisor at end of last cycle </mat-checkbox>
+        <mat-checkbox [(ngModel)]="includeDivisorAtEnd"> Include divisor at end of last cycle</mat-checkbox>
       </mat-card>
     </div>
     <div class="col-md-3">
@@ -47,23 +47,25 @@
       <strong>Error: </strong>
       <br>
       <b>line:</b> {{ error.lineNumber }} <br>
-      <b>message: </b>  <br>
+      <b>message: </b> <br>
       {{ error.message }}
     </div>
     <div class="col-md-2"></div>
   </div>
 
   <br>
-  <div class="row">
-    <div class="col-md-12 padder">
-      <mat-card>
-        <mat-card-title>
-          Output area
-        </mat-card-title>
+  <div class="padder grow">
+    <mat-card>
+      <mat-card-title>
+        Output area
+      </mat-card-title>
+      <mat-card-actions>
         <button mat-raised-button (click)="output = ''">Clear...</button>
         <button mat-raised-button (click)="outputArea.select()">Select all</button>
+      </mat-card-actions>
+      <mat-card-content>
         <textarea matInput #outputArea readonly placeholder="output will be here" [value]="output"></textarea>
-      </mat-card>
-    </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

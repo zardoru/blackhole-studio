@@ -1,127 +1,171 @@
-<div class="row">
-  <div class="col-md-9">
-    <b style="padding: 2%">Menu</b> <button mat-button [matMenuTriggerFor]="fileMenu">Collection</button>
+<mat-toolbar>
+  <div class="flex-3">
+    <b style="padding: 2%">Editor Menu</b>
+    <button mat-button [matMenuTriggerFor]="fileMenu">Collection</button>
   </div>
-  <div class="col-md-3">
+
+  <div class="flex-9 center">
+    <mat-button-toggle-group #tab="matButtonToggleGroup" value="code">
+      <mat-button-toggle value="code">Code</mat-button-toggle>
+      <mat-button-toggle value="prop">Properties</mat-button-toggle>
+      <mat-button-toggle value="ref">Reference</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <div class="flex-3">
     <div class="text-center">
       <b>Working on:</b> {{ currentFunction.name }}
     </div>
   </div>
+
+  <mat-menu #fileMenu>
+    <button mat-menu-item (click)="onNew(SvFunctionType.SV)">New SV function</button>
+    <button mat-menu-item (click)="onNew(SvFunctionType.BPM)">New BPM function</button>
+    <button mat-menu-item (click)="onNew(SvFunctionType.TimingPoint)">New Timing Point function</button>
+    <button mat-menu-item (click)="onLoad()">Load...</button>
+    <button mat-menu-item (click)="onSave()">Save to collection...</button>
+    <button mat-menu-item (click)="onDelete()">Delete from collection...</button>
+    <button mat-menu-item>Import collection...</button>
+    <button mat-menu-item (click)="onExport()">Export collection</button>
+  </mat-menu>
+
+</mat-toolbar>
+
+<!-- editor -->
+<div ace-editor
+     class="editor"
+     [(text)]="currentFunction.body"
+     [mode]="'javascript'"
+     [theme]="'eclipse'"
+     #editor
+     *ngIf="tab.value == 'code'">
 </div>
-<mat-menu #fileMenu>
-  <button mat-menu-item (click)="onNew()">New</button>
-  <button mat-menu-item (click)="onLoad()">Load...</button>
-  <button mat-menu-item (click)="onSave()">Save to collection...</button>
-  <button mat-menu-item (click)="onDelete()">Delete from collection...</button>
-  <button mat-menu-item>Import collection...</button>
-  <button mat-menu-item (click)="onExport()">Export collection</button>
-</mat-menu>
 
-<mat-tab-group>
-  <mat-tab label="Code">
-    <div ace-editor [(text)]="currentFunction.body" [mode]="'javascript'" [theme]="'eclipse'" [options]="editorOptions" style="min-height: 540px"
-      #editor>
-    </div>
-
-  </mat-tab>
-  <mat-tab label="Parameters">
-    <br>
-    <div class="paramarea">
-      <mat-card>
-        <mat-form-field>
-          <input matInput placeholder="Function Name" [(ngModel)]="currentFunction.name">
-        </mat-form-field>
-        <br>
-        <mat-form-field>
+<!-- Parameters -->
+<div *ngIf="tab.value =='prop'">
+  <div class="param-area">
+    <mat-card>
+      <mat-form-field>
+        <input matInput placeholder="Function Name" [(ngModel)]="currentFunction.name">
+      </mat-form-field>
+      <br>
+      <mat-form-field>
           <textarea matInput placeholder="Function description" [(ngModel)]="currentFunction.tooltip">
         </textarea>
-        </mat-form-field>
-        <mat-checkbox [(ngModel)]="currentFunction.isBpm">Is BPM function</mat-checkbox>
-      </mat-card>
-    </div>
+      </mat-form-field>
 
+      <mat-checkbox
+        [(ngModel)]="currentFunction.doNotSkipRepeatedValues"
+        matTooltip="If checked, repeated numerical values returned by your function won't be skipped. (Non-numerical values are still skipped!)">
+        Don't skip repeated values
+      </mat-checkbox>
+      <br>
+
+      <label id="func-type-label">Function Type</label> <br>
+      <mat-radio-group aria-labelledby="func-type-label" [(ngModel)]="currentFunction.type">
+        <mat-radio-button [value]="SvFunctionType.SV">SV function</mat-radio-button>
+        <br>
+        <mat-radio-button [value]="SvFunctionType.BPM">BPM function</mat-radio-button>
+        <br>
+        <mat-radio-button [value]="SvFunctionType.TimingPoint">Timing Point function</mat-radio-button>
+      </mat-radio-group>
+    </mat-card>
+  </div>
+
+
+  <div class="param-area">
+    <h2> Function Parameters </h2>
+    <br>
+    <button mat-raised-button (click)="addParam();">Add...</button>
     <br>
 
-    <div class="paramarea">
-      <h2> Function Parameters </h2>
-      <br>
-      <button mat-raised-button (click)="addParam();">Add...</button>
-      <br>
+    <table mat-table [dataSource]="currentFunction.parameters" #paramTable>
+      <ng-container matColumnDef="paramName">
+        <th mat-header-cell *matHeaderCellDef> Parameter Name</th>
+        <td mat-cell *matCellDef="let el">
+          <mat-form-field class="tbIn">
+            <input matInput class="tbIn" [(ngModel)]="el.name">
+          </mat-form-field>
+        </td>
+      </ng-container>
 
-      <table mat-table [dataSource]="currentFunction.parameters" #paramTable>
-        <ng-container matColumnDef="paramName">
-          <th mat-header-cell *matHeaderCellDef> Parameter Name </th>
-          <td mat-cell *matCellDef="let el">
-            <mat-form-field class="tbIn">
-              <input matInput class="tbIn" [(ngModel)]="el.name">
-            </mat-form-field>
-          </td>
-        </ng-container>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Description</th>
+        <td mat-cell *matCellDef="let el">
+          <mat-form-field class="tbIn">
+            <input matInput class="tbIn" [(ngModel)]="el.description">
+          </mat-form-field>
+        </td>
+      </ng-container>
 
-        <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef> Description </th>
-          <td mat-cell *matCellDef="let el">
-            <mat-form-field class="tbIn">
-              <input matInput class="tbIn" [(ngModel)]="el.description">
-            </mat-form-field>
-          </td>
-        </ng-container>
+      <ng-container matColumnDef="defaultValue">
+        <th mat-header-cell *matHeaderCellDef> Default Value</th>
+        <td mat-cell *matCellDef="let el">
+          <mat-form-field class="tbIn">
+            <input matInput class="tbIn" [(ngModel)]="el.defaultValue">
+          </mat-form-field>
+        </td>
+      </ng-container>
 
-        <ng-container matColumnDef="defaultValue">
-          <th mat-header-cell *matHeaderCellDef> Default Value </th>
-          <td mat-cell *matCellDef="let el">
-            <mat-form-field class="tbIn">
-              <input matInput class="tbIn" [(ngModel)]="el.defaultValue">
-            </mat-form-field>
-          </td>
-        </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions</th>
+        <td mat-cell *matCellDef="let el">
+          <button mat-button (click)="deleteParam(el)">
+            Remove
+          </button>
+        </td>
+      </ng-container>
 
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef> Actions </th>
-          <td mat-cell *matCellDef="let el">
-            <button mat-button (click)="deleteParam(el)">
-              Remove
-            </button>
-          </td>
-        </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
+    <p class="alert alert-primary" *ngIf="currentFunction.parameters.length === 0">
+      No parameters to display.
+    </p>
 
-      <p class="alert alert-primary" *ngIf="currentFunction.parameters.length === 0">
-        No parameters to display.
-      </p>
+    <br>
+  </div>
+</div>
 
-      <br>
-
-    </div>
-
-  </mat-tab>
-  <mat-tab label="Reference">
-    <div class="padder col">
-      <h2>Reference</h2>
+<!-- Reference -->
+<div *ngIf="tab.value == 'ref'" class="padder">
+  <h2>Reference</h2>
+  <ul>
+    <li>
+      Returning a
+      <code>NaN</code> value will skip over the current divisor.
+    </li>
+    <li>
+      The
+      <code>params.builtin</code> value contains some useful definitions, such as
       <ul>
-        <li>
-          Returning a
-          <code>NaN</code> value will skip over the current divisor.
-        </li>
-        <li>
-          The
-          <code>params.builtin</code> value contains some useful definitions, such as
-          <code>currentDivisor</code>,
-          <code>divisorCount</code>,
-          <code>divisorBpm</code> (can be null),
-          <code>cycleBpm</code> (can be null),
-          <code>currentCycle</code>,
-          <code>cycleCount</code>,
-          <code>divisionSpan</code> in MS, and
-          <code>cycleSpan</code> in MS. Overwriting them changes the value for repeated calls within the same cycle.
-        </li>
-        <li>
-          The SV function is called once every divisor of every cycle.
-        </li>
+        <li><code>currentDivisor</code></li>
+        <li><code>divisorCount</code></li>
+        <li><code>divisorBpm</code> (can be null)</li>
+        <li><code>cycleBpm</code> (can be null)</li>
+        <li><code>currentCycle</code></li>
+        <li><code>cycleCount</code></li>
+        <li><code>divisionSpan</code> in MS</li>
+        <li><code>cycleSpan</code> in MS</li>
       </ul>
-    </div>
-  </mat-tab>
-</mat-tab-group>
+      Overwriting them changes the value for repeated calls within the same cycle.
+    </li>
+    <li>
+      The SV function is called once every divisor of every cycle.
+    </li>
+    <li>
+      The properties of the objects in the array passed to timing point functions are:
+      <ul>
+        <li><code>time: number</code></li>
+        <li><code>value: number</code></li>
+        <li><code>kiai: boolean</code></li>
+        <li><code>volume: number</code></li>
+        <li><code>sampleSet: integer</code></li>
+        <li><code>sampleIndex: integer</code></li>
+        <li><code>measureLength: number</code></li>
+        <li><code>inherited: boolean</code></li>
+      </ul>
+      If an object in the returned array does not follow this interface in its entirety, the object will be ignored.
+    </li>
+  </ul>
+</div>

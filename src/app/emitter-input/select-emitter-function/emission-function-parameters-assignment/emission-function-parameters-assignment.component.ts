@@ -12,7 +12,7 @@ export class EmissionFunctionParametersAssignmentComponent implements OnInit {
   target: SvFunction;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
-    console.log(data.target);
+    // console.log(data.target);
     this.target = data.target;
 
     for (let i = 0; i < this.target.parameters.length; i++) {

@@ -11,16 +11,16 @@ import {SelectEmitterFunctionComponent} from '../emitter-input/select-emitter-fu
   styleUrls: ['./emission-control.component.css']
 })
 export class EmissionControlComponent implements OnInit {
-  @ViewChild(TimeinputComponent)
+  @ViewChild(TimeinputComponent, {static: true})
   timeInput: TimeinputComponent;
 
-  @ViewChild(DivisorinputComponent)
+  @ViewChild(DivisorinputComponent, {static: true})
   divisorInput: DivisorinputComponent;
 
-  @ViewChild(TimingPointTemplateComponent)
+  @ViewChild(TimingPointTemplateComponent, {static: true})
   timingPointTemplate: TimingPointTemplateComponent;
 
-  @ViewChild(SelectEmitterFunctionComponent)
+  @ViewChild(SelectEmitterFunctionComponent, {static: true})
   funcParams: SelectEmitterFunctionComponent;
 
   output: string;

@@ -2,7 +2,6 @@ import {Component, ComponentFactory, ComponentFactoryResolver, ComponentRef, OnI
 import {TimingPointTemplateComponent} from '../emitter-input/timeinput/timing-point-template/timing-point-template.component';
 import {EmitterParameterTrioComponent} from './emitter-parameter-trio/emitter-parameter-trio.component';
 import {composeTimingPoints, OsuTimingPoint} from '../blackhole-classes/osu-timing-point';
-import {template} from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-compose-emitters',
@@ -13,10 +12,10 @@ import {template} from '@angular/core/src/render3';
 export class ComposeEmittersComponent implements OnInit {
   output: string;
 
-  @ViewChild(TimingPointTemplateComponent)
+  @ViewChild(TimingPointTemplateComponent, {static: true})
   tpTemplate: TimingPointTemplateComponent;
 
-  @ViewChild('container', {read: ViewContainerRef})
+  @ViewChild('container', {read: ViewContainerRef, static: false})
   container: ViewContainerRef;
 
   factory: ComponentFactory<EmitterParameterTrioComponent>;

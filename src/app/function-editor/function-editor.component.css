@@ -2,7 +2,7 @@
     display: inline;
 }
 
-.paramarea {
+.param-area {
     width: 90%;
     margin-left: 5%;
     margin-right: 5%;
@@ -18,4 +18,26 @@ td.mat-cell {
 
 .mat-form-field-wrapper {
     width: 90%;
+}
+
+.editor {
+  flex: 1 1 auto;
+  min-height: 500px;
+  max-width: 100%;
+}
+
+.flex-9 {
+  flex: 9 1 auto;
+}
+
+.flex-3 {
+  flex: 3 1 auto;
+}
+
+.flex-1 {
+  flex: 1 1 auto;
+}
+
+.center {
+  text-align: center;
 }

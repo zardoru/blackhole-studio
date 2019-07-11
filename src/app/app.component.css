@@ -1,0 +1,17 @@
+.tb-title {
+  flex-grow: 1;
+}
+
+.tb-buttons {
+  flex-grow: 2;
+}
+
+.title-pad {
+  padding: 1% 0%;
+}
+
+.fix-size {
+  height: 80px;
+  max-height: 80px;
+  min-height: 80px;
+}

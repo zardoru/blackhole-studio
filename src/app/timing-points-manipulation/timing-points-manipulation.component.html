@@ -1,0 +1,66 @@
+<div class="padder">
+  <div class="row">
+    <div class="col-md-8">
+      <mat-card>
+        <mat-card-title matTooltip="Put your .osu timing points here.">Timing Point Input</mat-card-title>
+        <mat-card-content>
+          <textarea matInput placeholder=".osu file timing points go here" [(ngModel)]="tpInput"></textarea>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="col-md-4">
+      <mat-card>
+        <mat-card-content>
+          <div class="row">
+            <h4>Timing Point function</h4>
+            <div class="col-md-12 text-center" [class.grey]="!currentFunction">
+              {{ currentFunction && currentFunction.name || "no function selected" }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 text-center">
+              <button mat-raised-button (click)="selectFunction()">Select function</button>
+            </div>
+            <div class="col-md-4 text-center">
+              <button mat-raised-button (click)="setParameters()" [disabled]="!currentFunction">
+                Set Parameters
+              </button>
+            </div>
+          </div>
+
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button (click)="execute()" [disabled]="!currentFunction">Run function</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <div class="row" *ngIf="error">
+      <div class="col-md-2"></div>
+      <div class="alert alert-danger col-md-8">
+        <strong>Error: </strong>
+        <br>
+        <b>line:</b> {{ error.lineNumber }} <br>
+        <b>message: </b> <br>
+        {{ error.message }}
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+
+    <mat-card style="flex: 1 1 auto;">
+      <mat-card-title>Tool Output</mat-card-title>
+      <mat-card-actions>
+        <button mat-raised-button (click)="tpInput = tpOutput">Feed current output into input</button>
+        <button mat-raised-button (click)="outArea.select()">Select all</button>
+        <button mat-raised-button (click)="tpOutput = ''">Clear</button>
+      </mat-card-actions>
+      <mat-card-content>
+        <textarea matInput
+                  readonly
+                  placeholder="output will be here"
+                  [(ngModel)]="tpOutput"
+                  #outArea></textarea>
+      </mat-card-content>
+    </mat-card>
+  </div>

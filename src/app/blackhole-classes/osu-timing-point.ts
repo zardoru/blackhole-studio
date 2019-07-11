@@ -1,3 +1,5 @@
+import {isNumber} from 'util';
+
 export enum SampleSet {
   Auto,
   Normal,
@@ -17,43 +19,9 @@ export interface OsuTimingPointDifference {
 }
 
 export class OsuTimingPoint {
-  /* in MS */
-  time = 0;
-
-  /*
-      if uninherited, it's beatspace
-      if inherited, it's -100 / SV
-  */
-  value: number = 60000 / 120;
-
-  kiai = false;
-
-  volume = 15;
-
-
-  sampleSet: SampleSet = SampleSet.Auto;
-  sampleIndex = 0;
-  measureLength = 4;
-
-  inherited = false;
 
   get svMultiplier() {
     return -100 / this.value;
-  }
-
-  static fromString(s: string): OsuTimingPoint {
-    const arr = s.split(',');
-    const tp = new OsuTimingPoint();
-    tp.time = parseFloat(arr[0]);
-    tp.value = parseFloat(arr[1]);
-    tp.measureLength = parseInt(arr[2], 10);
-    tp.sampleSet = parseInt(arr[3], 10);
-    tp.sampleIndex = parseInt(arr[4], 10);
-    tp.volume = parseInt(arr[5], 10);
-    tp.inherited = (arr[6] !== '1');
-    tp.kiai = (arr[7] === '1');
-
-    return tp;
   }
 
   constructor() {
@@ -78,6 +46,53 @@ export class OsuTimingPoint {
   get roundedTime() {
     return Math.round(this.time);
   }
+  /* in MS */
+  time = 0;
+
+  /*
+      if uninherited, it's beatspace
+      if inherited, it's -100 / SV
+  */
+  value: number = 60000 / 120;
+
+  kiai = false;
+
+  volume = 15;
+
+
+  sampleSet: SampleSet = SampleSet.Auto;
+  sampleIndex = 0;
+  measureLength = 4;
+
+  inherited = false;
+
+  static fromString(s: string): OsuTimingPoint {
+    const arr = s.split(',');
+    const tp = new OsuTimingPoint();
+    tp.time = parseFloat(arr[0]);
+    tp.value = parseFloat(arr[1]);
+    tp.measureLength = parseInt(arr[2], 10);
+    tp.sampleSet = parseInt(arr[3], 10);
+    tp.sampleIndex = parseInt(arr[4], 10);
+    tp.volume = parseInt(arr[5], 10);
+    tp.inherited = (arr[6] !== '1');
+    tp.kiai = (arr[7] === '1');
+
+    return tp;
+  }
+
+  // returns true if it has all the properties and are the right type
+  static isValidDifference(x: any): boolean {
+    return x.time          != null && typeof x.time === 'number'
+        && x.value         != null && typeof x.value === 'number'
+        && x.kiai          != null && typeof x.kiai === 'boolean'
+        && x.volume        != null && typeof x.volume === 'number'
+        && x.sampleSet     != null && Number.isInteger(x.sampleSet)
+        && x.sampleIndex   != null && Number.isInteger(x.sampleIndex)
+        && x.measureLength != null && typeof x.measureLength === 'number'
+        && x.inherited     != null && typeof x.inherited === 'boolean';
+
+  }
 
   toString() {
     return `${this.time},${this.value},${this.measureLength},` +
@@ -101,6 +116,19 @@ export class OsuTimingPoint {
       ret.inherited = this.inherited;
     }
     return ret;
+  }
+
+  toDifference(): OsuTimingPointDifference {
+    return {
+      time: this.time,
+      value: this.value,
+      kiai: this.kiai,
+      volume: this.volume,
+      sampleSet: this.sampleSet,
+      sampleIndex: this.sampleIndex,
+      measureLength: this.measureLength,
+      inherited: this.inherited
+    };
   }
 }
 

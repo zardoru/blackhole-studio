@@ -11,13 +11,13 @@ import {emitTargets} from '../../blackhole-classes/osu-timing-point-emitter';
   styleUrls: ['./emitter-parameter-trio.component.css']
 })
 export class EmitterParameterTrioComponent implements OnInit {
-  @ViewChild(TimeinputComponent)
+  @ViewChild(TimeinputComponent, {static: true})
   timeInput: TimeinputComponent;
 
-  @ViewChild(DivisorinputComponent)
+  @ViewChild(DivisorinputComponent, {static: true})
   divisorInput: DivisorinputComponent;
 
-  @ViewChild(SelectEmitterFunctionComponent)
+  @ViewChild(SelectEmitterFunctionComponent, {static: true})
   funcInput: SelectEmitterFunctionComponent;
 
   @Output() onRemove = new EventEmitter();
@@ -29,11 +29,12 @@ export class EmitterParameterTrioComponent implements OnInit {
     if (this.funcInput.currentFunction) {
       return this.funcInput.currentFunction.name;
     } else {
-      if (this.funcInput.useFixedBpm)
-        return "bpm: " + this.funcInput.bpm;
+      if (this.funcInput.useFixedBpm) {
+        return 'bpm: ' + this.funcInput.bpm;
+      }
     }
 
-    return "unknown";
+    return 'unknown';
   }
 
   constructor() { }
@@ -42,7 +43,7 @@ export class EmitterParameterTrioComponent implements OnInit {
     this.onRemove.emit(this);
   }
 
-  emit(template: OsuTimingPoint) : OsuTimingPoint[] {
+  emit(template: OsuTimingPoint): OsuTimingPoint[] {
     const ti = this.timeInput.currentTimeInput;
     const di = this.divisorInput.currentDivisorInput;
     const fp = this.funcInput;

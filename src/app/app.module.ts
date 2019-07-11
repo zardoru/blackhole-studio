@@ -16,7 +16,7 @@ import {
   MatDialogModule,
   MatCheckboxModule,
   MatToolbarModule,
-  MatExpansionModule
+  MatExpansionModule, MatRadioModule, MatTooltipModule, MatButtonToggleModule
 } from '@angular/material';
 import { TimeinputDurationComponent } from './emitter-input/timeinput/timeinput-duration/timeinput-duration.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -40,6 +40,7 @@ import { ComposeEmittersComponent } from './compose-emitters/compose-emitters.co
 import { ComposeTimingPointsComponent } from './compose-timing-points/compose-timing-points.component';
 import { SelectEmitterFunctionComponent } from './emitter-input/select-emitter-function/select-emitter-function.component';
 import { EmitterParameterTrioComponent } from './compose-emitters/emitter-parameter-trio/emitter-parameter-trio.component';
+import { TimingPointsManipulationComponent } from './timing-points-manipulation/timing-points-manipulation.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { EmitterParameterTrioComponent } from './compose-emitters/emitter-parame
     ComposeEmittersComponent,
     ComposeTimingPointsComponent,
     SelectEmitterFunctionComponent,
-    EmitterParameterTrioComponent
+    EmitterParameterTrioComponent,
+    TimingPointsManipulationComponent
   ],
   imports: [
     BrowserModule,
@@ -78,7 +80,10 @@ import { EmitterParameterTrioComponent } from './compose-emitters/emitter-parame
     MatToolbarModule,
     BrowserAnimationsModule,
     MatExpansionModule,
-    AceEditorModule
+    MatTooltipModule,
+    AceEditorModule,
+    MatRadioModule,
+    MatButtonToggleModule
   ],
   providers: [],
   entryComponents: [

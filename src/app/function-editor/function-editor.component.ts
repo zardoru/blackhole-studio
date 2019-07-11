@@ -1,9 +1,9 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {SvFunction, SvFunctionCollection, SvFunctionType, SvParameter} from '../blackhole-classes/sv-functions';
 import {MatDialog} from '@angular/material';
 import {SelectFunctionDialogComponent} from './select-function-dialog/select-function-dialog.component';
 import {DeleteFunctionDialogComponent} from './delete-function-dialog/delete-function-dialog.component';
-import { saveAs } from 'file-saver/FileSaver.js';
+import {saveAs} from 'file-saver/dist/FileSaver.js';
 
 @Component({
   selector: 'app-function-editor',
@@ -11,15 +11,15 @@ import { saveAs } from 'file-saver/FileSaver.js';
   styleUrls: ['./function-editor.component.css']
 })
 
-export class FunctionEditorComponent implements OnInit {
+export class FunctionEditorComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('editor') editor;
-
-  @ViewChild('paramTable') paramTable;
+  @ViewChild('paramTable', {static: false}) paramTable;
 
   @Input() collection: SvFunctionCollection;
 
   currentFunction: SvFunction;
+
+  SvFunctionType = SvFunctionType;
 
   displayedColumns = [
     'paramName',
@@ -29,27 +29,40 @@ export class FunctionEditorComponent implements OnInit {
   ];
 
 
-  editorOptions = {
+  /*editorOptions = {
+    enableBasicAutocompletion: true,
     enableLiveAutocompletion: true
-  };
+  };*/
 
   constructor(public dialog: MatDialog) {
     this.currentFunction = new SvFunction(SvFunctionType.SV);
+    this.SvFunctionType = SvFunctionType;
   }
 
   ngOnInit() {
   }
 
-  onNew() {
-    this.currentFunction = new SvFunction(SvFunctionType.SV);
+  ngAfterViewInit() {
+    // this.editor.getEditor().setOptions(this.editorOptions);
+  }
+
+  onNew(type: SvFunctionType) {
+    this.currentFunction = new SvFunction(type);
   }
 
   onLoad() {
-    const opendialog = this.dialog.open(SelectFunctionDialogComponent);
+    const openDialog = this.dialog.open(SelectFunctionDialogComponent);
 
-    opendialog.afterClosed().subscribe((value) => {
+    openDialog.afterClosed().subscribe((value) => {
       if (value) {
         this.currentFunction = value;
+
+        // sanity check
+        if (this.currentFunction.type === null ||
+          typeof(this.currentFunction.type) === 'undefined') {
+          this.currentFunction.type = SvFunctionType.SV;
+        }
+
       }
     });
   }
@@ -64,20 +77,20 @@ export class FunctionEditorComponent implements OnInit {
     }
 
     const msg = `The function named "${this.currentFunction.name}" already exists. Overwrite?`;
-    const funcobj = SvFunctionCollection.getCollection();
-    if (!funcobj[this.currentFunction.name] ||
-      (funcobj[this.currentFunction.name] && confirm(msg))) {
+    const functionList = SvFunctionCollection.getCollection();
+    if (!functionList[this.currentFunction.name] ||
+      (functionList[this.currentFunction.name] && confirm(msg))) {
 
-      funcobj[this.currentFunction.name] = this.currentFunction;
+      functionList[this.currentFunction.name] = this.currentFunction;
 
-      SvFunctionCollection.setCollection(funcobj);
+      SvFunctionCollection.setCollection(functionList);
 
       alert(`Function ${this.currentFunction.name} saved correctly.`);
     }
   }
 
   onDelete() {
-    const deletedialog = this.dialog.open(DeleteFunctionDialogComponent);
+    const deleteDialog = this.dialog.open(DeleteFunctionDialogComponent);
   }
 
   addParam() {
@@ -102,10 +115,5 @@ export class FunctionEditorComponent implements OnInit {
     const collStr = JSON.stringify(SvFunctionCollection.getCollection());
     const collBlob = new Blob([collStr]);
     saveAs(collBlob, 'export.json');
-  }
-
-
-  ngAfterViewInit() {
-
   }
 }

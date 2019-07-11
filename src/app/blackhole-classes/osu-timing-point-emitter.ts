@@ -1,4 +1,4 @@
-import {OsuTimingPoint} from './osu-timing-point';
+import {OsuTimingPoint, OsuTimingPointDifference} from './osu-timing-point';
 import {DivisorEmitter, DivisorEmitterBeatFraction, CycleDivision} from './divisor-emitter';
 import {CycleTimeEmitter, CycleTimeBeats, CycleOutput} from './cycle-time-emitter';
 import {SvFunction, SvFunctionType} from './sv-functions';
@@ -35,9 +35,11 @@ export class OsuTimingPointEmitter {
   static* emitBpmFunction(vars: any,
                           cycle: CycleOutput,
                           defaultTimingPoint: OsuTimingPoint,
-                          bpmFunction: (number, any) => number): TimingList {
+                          bpmFunction: (number, any) => number,
+                          skipRepeated: boolean): TimingList {
 
     let i = 0;
+    let lastBpm = NaN;
 
     vars.builtin.divisorCount = cycle.count;
 
@@ -63,7 +65,12 @@ export class OsuTimingPointEmitter {
         inherited: false
       });
 
-      yield point;
+      // yield if not skip
+      const skip = (bpm === lastBpm && skipRepeated);
+      if (!skip) {
+        lastBpm = bpm;
+        yield point;
+      }
 
     }
   }
@@ -71,7 +78,8 @@ export class OsuTimingPointEmitter {
   static* emitSv(vars: any,
                  cycle: CycleOutput,
                  defaultTimingPoint: OsuTimingPoint,
-                 svFunction: (number, any) => number): TimingList {
+                 svFunction: (number, any) => number,
+                 skipRepeated: boolean): TimingList {
 
     let i = 0;
     let lastSv = NaN;
@@ -109,7 +117,8 @@ export class OsuTimingPointEmitter {
       });
 
       // yield if it's valid
-      if (multiplier !== lastSv) {
+      const skip = (multiplier === lastSv && skipRepeated);
+      if (!skip) {
         lastSv = multiplier;
         yield point;
       }
@@ -180,13 +189,15 @@ export function emitTargets(
           varsSv,
           cycleData,
           defaultTimingPoint,
-          userFunctionSV);
+          userFunctionSV,
+          !svFunction.doNotSkipRepeatedValues);
       } else {
         cycleResult = OsuTimingPointEmitter.emitSv(
           varsSv,
           cycleData,
           defaultTimingPoint,
-          userFunctionSV);
+          userFunctionSV,
+          !svFunction.doNotSkipRepeatedValues);
       }
     } else {
       cycleResult = OsuTimingPointEmitter.emitFixedBpm(
@@ -203,4 +214,10 @@ export function emitTargets(
   }
 
   return output;
+}
+
+export function applyManipulation(func: SvFunction, timingPoints: OsuTimingPointDifference[]) {
+  const f = eval(func.body);
+  const vars = SvFunction.getCurrentParameters(func) || {};
+  return f(timingPoints, vars);
 }
