@@ -1,5 +1,5 @@
 <mat-form-field class="fullwidth">
-    <mat-select placeholder="Divisor Type" [(ngModel)]="type" (ngModelChange)="onTypeChange($event)" class="fullwidth">
+    <mat-select placeholder="Divisor Type" [(ngModel)]="type" (ngModelChange)="onTypeChange()" class="fullwidth">
         <mat-option [value]="DivisorInputType.Fixed">
             Fixed
         </mat-option>
@@ -37,3 +37,12 @@
         <input matInput type="number" placeholder="Span (MS)" [(ngModel)]="currentDivisorInput.span">
     </mat-form-field>
 </div>
+
+<label id="endpoint-mode">Include cycle end point</label> <br>
+<mat-radio-group
+  aria-labelledby="endpoint-mode"
+  [(ngModel)]="endDivisorMode">
+  <mat-radio-button [value]="EndPointMode.NoEndPoint">No</mat-radio-button> <br>
+  <mat-radio-button [value]="EndPointMode.LastCycle">Only last cycle</mat-radio-button> <br>
+  <mat-radio-button [value]="EndPointMode.EveryCycle">Every cycle</mat-radio-button>
+</mat-radio-group>

@@ -23,7 +23,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TimeinputBeatsComponent } from './emitter-input/timeinput/timeinput-beats/timeinput-beats.component';
 import { TimeinputNotetimesComponent } from './emitter-input/timeinput/timeinput-notetimes/timeinput-notetimes.component';
 import { TimeinputStartendComponent } from './emitter-input/timeinput/timeinput-startend/timeinput-startend.component';
-import { DivisorinputComponent } from './emitter-input/divisorinput/divisorinput.component';
+import { DivisorInputComponent } from './emitter-input/divisorinput/divisor-input.component';
 import { EmissionControlComponent } from './emission-control/emission-control.component';
 import { FunctionEditorComponent } from './function-editor/function-editor.component';
 
@@ -50,7 +50,7 @@ import { TimingPointsManipulationComponent } from './timing-points-manipulation/
     TimeinputBeatsComponent,
     TimeinputNotetimesComponent,
     TimeinputStartendComponent,
-    DivisorinputComponent,
+    DivisorInputComponent,
     EmissionControlComponent,
     FunctionEditorComponent,
     SelectFunctionDialogComponent,

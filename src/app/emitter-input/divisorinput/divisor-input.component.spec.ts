@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DivisorinputComponent } from './divisorinput.component';
+import { DivisorInputComponent } from './divisor-input.component';
 
-describe('DivisorinputComponent', () => {
-  let component: DivisorinputComponent;
-  let fixture: ComponentFixture<DivisorinputComponent>;
+describe('DivisorInputComponent', () => {
+  let component: DivisorInputComponent;
+  let fixture: ComponentFixture<DivisorInputComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DivisorinputComponent ]
+      declarations: [ DivisorInputComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DivisorinputComponent);
+    fixture = TestBed.createComponent(DivisorInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

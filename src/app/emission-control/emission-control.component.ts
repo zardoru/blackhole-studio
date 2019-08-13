@@ -1,9 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {TimeinputComponent} from '../emitter-input/timeinput/timeinput.component';
-import {DivisorinputComponent} from '../emitter-input/divisorinput/divisorinput.component';
+import {DivisorInputComponent} from '../emitter-input/divisorinput/divisor-input.component';
 import {TimingPointTemplateComponent} from '../emitter-input/timeinput/timing-point-template/timing-point-template.component';
 import {emitTargets} from '../blackhole-classes/osu-timing-point-emitter';
 import {SelectEmitterFunctionComponent} from '../emitter-input/select-emitter-function/select-emitter-function.component';
+import {EndPointMode} from '../blackhole-classes/divisor-emitter';
 
 @Component({
   selector: 'app-emission-control',
@@ -14,8 +15,8 @@ export class EmissionControlComponent implements OnInit {
   @ViewChild(TimeinputComponent, {static: true})
   timeInput: TimeinputComponent;
 
-  @ViewChild(DivisorinputComponent, {static: true})
-  divisorInput: DivisorinputComponent;
+  @ViewChild(DivisorInputComponent, {static: true})
+  divisorInput: DivisorInputComponent;
 
   @ViewChild(TimingPointTemplateComponent, {static: true})
   timingPointTemplate: TimingPointTemplateComponent;
@@ -26,8 +27,6 @@ export class EmissionControlComponent implements OnInit {
   output: string;
 
   error: any;
-
-  includeDivisorAtEnd: boolean;
 
   constructor() {
     this.error = null;
@@ -57,7 +56,7 @@ export class EmissionControlComponent implements OnInit {
         this.funcParams.currentTimeFunction,
         timingDefault,
         this.funcParams.bpm,
-        this.includeDivisorAtEnd
+        this.divisorInput.endDivisorMode
       ).map(x => x.toString());
 
       this.output = result.join('\n');

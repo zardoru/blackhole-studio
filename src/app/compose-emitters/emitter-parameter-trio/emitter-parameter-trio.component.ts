@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {TimeinputComponent} from '../../emitter-input/timeinput/timeinput.component';
-import {DivisorinputComponent} from '../../emitter-input/divisorinput/divisorinput.component';
+import {DivisorInputComponent} from '../../emitter-input/divisorinput/divisor-input.component';
 import {SelectEmitterFunctionComponent} from '../../emitter-input/select-emitter-function/select-emitter-function.component';
 import {OsuTimingPoint} from '../../blackhole-classes/osu-timing-point';
 import {emitTargets} from '../../blackhole-classes/osu-timing-point-emitter';
@@ -14,16 +14,14 @@ export class EmitterParameterTrioComponent implements OnInit {
   @ViewChild(TimeinputComponent, {static: true})
   timeInput: TimeinputComponent;
 
-  @ViewChild(DivisorinputComponent, {static: true})
-  divisorInput: DivisorinputComponent;
+  @ViewChild(DivisorInputComponent, {static: true})
+  divisorInput: DivisorInputComponent;
 
   @ViewChild(SelectEmitterFunctionComponent, {static: true})
   funcInput: SelectEmitterFunctionComponent;
 
   @Output() onRemove = new EventEmitter();
 
-
-  includeDivisorAtEnd: boolean;
 
   get functitle() {
     if (this.funcInput.currentFunction) {
@@ -56,7 +54,7 @@ export class EmitterParameterTrioComponent implements OnInit {
       fp.currentTimeFunction,
       template,
       fp.bpm,
-      this.includeDivisorAtEnd
+      this.divisorInput.endDivisorMode
     );
   }
 

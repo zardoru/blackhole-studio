@@ -1,6 +1,12 @@
 export interface CycleDivision {time: number; fraction: number;}
 export type Cycle = IterableIterator<CycleDivision>;
 
+export enum EndPointMode {
+  NoEndPoint,
+  LastCycle,
+  EveryCycle
+}
+
 export abstract class DivisorEmitter {
     abstract getSpanDivisorCount(span: number);
 

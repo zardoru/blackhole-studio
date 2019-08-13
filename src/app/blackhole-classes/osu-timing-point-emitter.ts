@@ -1,6 +1,6 @@
 import {OsuTimingPoint, OsuTimingPointDifference} from './osu-timing-point';
-import {DivisorEmitter, DivisorEmitterBeatFraction, CycleDivision} from './divisor-emitter';
-import {CycleTimeEmitter, CycleTimeBeats, CycleOutput} from './cycle-time-emitter';
+import {CycleDivision, DivisorEmitter, DivisorEmitterBeatFraction, EndPointMode} from './divisor-emitter';
+import {CycleOutput, CycleTimeBeats, CycleTimeEmitter} from './cycle-time-emitter';
 import {SvFunction, SvFunctionType} from './sv-functions';
 
 type TimingList = IterableIterator<OsuTimingPoint>;
@@ -136,7 +136,7 @@ export function emitTargets(
   timeFunction: SvFunction,
   defaultTimingPoint: OsuTimingPoint,
   fixedBpm: number,
-  includeDivisorAtEnd: boolean): OsuTimingPoint[] {
+  endDivisorMode: EndPointMode): OsuTimingPoint[] {
   const output: OsuTimingPoint[] = [];
   const cycleCount = timeInput.cycleCount;
 
@@ -173,12 +173,26 @@ export function emitTargets(
     varsSv.builtin = builtin;
     varsTime.builtin = builtin;
 
+    let includeCycleDivisorEnd = false;
+
+    switch (endDivisorMode) {
+      case EndPointMode.EveryCycle:
+        includeCycleDivisorEnd = true;
+        break;
+      case EndPointMode.LastCycle:
+        includeCycleDivisorEnd = i === cycleCount - 1;
+        break;
+      case EndPointMode.NoEndPoint:
+        includeCycleDivisorEnd = false;
+        break;
+    }
+
     const cycleData = timeInput.createCycle(
       i,
       divisors,
       userFunctionTime,
       varsTime,
-      includeDivisorAtEnd && (i === (cycleCount - 1))
+      includeCycleDivisorEnd
     );
 
     let cycleResult: TimingList;
